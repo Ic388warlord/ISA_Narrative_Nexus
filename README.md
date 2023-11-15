@@ -9,7 +9,7 @@ git clone https://github.com/Ic388warlord/ISA_Narrative_Nexus.git
 ### Create a .env file containing OpenAI API key
 #### cd into directory containing machine learning api
 ```
-cd ISA_NARRATIVE_NEXUS/machine-learning-api
+cd ISA_Narrative_Nexus/machine-learning-api/
 ```
 #### create .env file
 ```
@@ -18,7 +18,7 @@ echo "OPENAI_API_KEY=REPLACE WITH YOU API KEY" > .env
 ### Create Python virtual env
 #### cd into directory containing machine learning api
 ```
-cd ISA_NARRATIVE_NEXUS/machine-learning-api
+cd ISA_Narrative_Nexus/machine-learning-api/
 ```
 #### Initiate virtual environment
 Creates a virtual python environment called venv
