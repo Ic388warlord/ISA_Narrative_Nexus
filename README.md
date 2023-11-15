@@ -15,10 +15,24 @@ cd ISA_Narrative_Nexus/machine-learning-api/
 ```
 echo "OPENAI_API_KEY=REPLACE WITH YOU API KEY" > .env
 ```
+##### Check if the .env file was created successfully
+```
+cat .env
+```
 ### Create Python virtual env
 #### cd into directory containing machine learning api
 ```
 cd ISA_Narrative_Nexus/machine-learning-api/
+```
+#### Install virtualenv
+On Windows:
+```
+pip3 install virtualenv
+```
+
+On Unix or MacOS
+```
+apt install python3.11-venv
 ```
 #### Initiate virtual environment
 Creates a virtual python environment called venv
@@ -27,7 +41,6 @@ On Windows (Note: check if 'python' on windows is python version 3):
 ```
 python -m venv venv
 ```
-
 
 On Unix or MacOS:
 ```
@@ -58,19 +71,16 @@ On Unix or MacOS:
 ```
 python3 app.py
 ```
-
 ### Support genres:
 ```
 superhero, action, drama, horror, thriller, sci_fi
 ```
-
 #### Call the POST request with postman:
-
-#####
+##### URL
 ```
 http://localhost:8000/generate
 ```
-
+##### Request Body
 ```json
 {
     "sentence" : "Batman",
