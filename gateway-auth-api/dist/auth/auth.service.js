@@ -38,6 +38,7 @@ let AuthService = class AuthService {
         return {
             id: user.id,
             email: user.email,
+            role: user.role,
         };
     }
 };
