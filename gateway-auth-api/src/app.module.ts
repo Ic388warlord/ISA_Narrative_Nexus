@@ -5,11 +5,13 @@ import { AuthModule } from "./auth/auth.module";
 import { UserModule } from "./user/user.module";
 import { APP_GUARD } from "@nestjs/core";
 import { AuthGuard, RoleGuard } from "./auth/auth.guard";
+import { RedisModule } from "./redis/redis.module";
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
+    RedisModule,
     AuthModule,
     UserModule,
   ],

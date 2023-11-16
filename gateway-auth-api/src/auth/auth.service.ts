@@ -3,6 +3,7 @@ import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { User } from "@prisma/client";
 import { compareSync } from "bcrypt";
+import { RedisService } from "src/redis/redis.service";
 import { UserService } from "src/user/user.service";
 
 @Injectable()
@@ -11,6 +12,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly userService: UserService,
+    private readonly redisService: RedisService,
   ) {}
 
   async login(email: string, password: string) {
@@ -26,6 +28,12 @@ export class AuthService {
     });
 
     return token;
+  }
+
+  async logout(authorization: string) {
+    const [type, token] = authorization.split(" ") ?? [];
+    if (type !== "Bearer") throw new UnauthorizedException("Invalid token");
+    this.redisService.blacklistToken(token);
   }
 
   me(user: User) {

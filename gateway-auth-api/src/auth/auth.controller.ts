@@ -26,6 +26,11 @@ export class AuthController {
     return this.authService.login(loginDto.email, loginDto.password);
   }
 
+  @Get("logout")
+  logout(@Req() req: Request) {
+    return this.authService.logout(req.headers.authorization);
+  }
+
   @Get("me")
   me(@Req() req: Request) {
     return this.authService.me(req["user"]);

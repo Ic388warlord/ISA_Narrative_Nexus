@@ -11,6 +11,7 @@ import { JwtService } from "@nestjs/jwt";
 import { Request } from "express";
 import { Observable } from "rxjs";
 import { PublicKey, RolesKey } from "./auth.metadata";
+import { RedisService } from "src/redis/redis.service";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -18,11 +19,10 @@ export class AuthGuard implements CanActivate {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly reflector: Reflector,
+    private readonly redisService: RedisService,
   ) {}
 
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(PublicKey, [
       context.getHandler(),
       context.getClass(),
@@ -33,6 +33,11 @@ export class AuthGuard implements CanActivate {
     const token = this.extractTokenFromHeaders(request);
 
     if (!token) throw new UnauthorizedException("Invalid token");
+
+    const isBlacklisted = await this.redisService.isBlacklistedToken(token);
+    if (isBlacklisted) {
+      throw new UnauthorizedException("Invalid token: blacklisted");
+    }
 
     try {
       const payload = this.jwtService.verify(token, {
