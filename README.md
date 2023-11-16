@@ -1,12 +1,12 @@
 # ISA_Narrative_Nexus
 
 # Machine Learning API
-## Install instruction
-### git clone repository
+## Installation instruction
+### 1. git clone repository
 ```
 git clone https://github.com/Ic388warlord/ISA_Narrative_Nexus.git
 ```
-### Create a .env file containing OpenAI API key
+### 2. Create a .env file containing OpenAI API key
 #### cd into directory containing machine learning api
 ```
 cd ISA_Narrative_Nexus/machine-learning-api/
@@ -19,7 +19,7 @@ echo "OPENAI_API_KEY=REPLACE WITH YOU API KEY" > .env
 ```
 cat .env
 ```
-### Create Python virtual env
+### 4. Create Python virtual env
 #### cd into directory containing machine learning api
 ```
 cd ISA_Narrative_Nexus/machine-learning-api/
@@ -56,12 +56,12 @@ On Unix or MacOS:
 ```
 source venv/bin/activate
 ```
-### Install required dependencies
+### 5. Install required dependencies
 Note: pip3 is used for Python 3 packages
 ```
 pip3 install -r requirements.txt
 ```
-### Initiate app.py
+### 6. Initiate app.py
 On Windows:
 ```
 python app.py
@@ -71,7 +71,7 @@ On Unix or MacOS:
 ```
 python3 app.py
 ```
-### Support genres:
+### 7. Supported genres:
 ```
 superhero, action, drama, horror, thriller, sci_fi
 ```
