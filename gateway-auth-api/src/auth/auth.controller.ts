@@ -6,11 +6,12 @@ import {
   HttpStatus,
   Post,
   Req,
+  Res,
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { Public } from "./auth.metadata";
 import { LoginDto } from "./dtos/login.dto";
-import { Request } from "express";
+import { Request, Response } from "express";
 
 @Controller({
   path: "auth",
@@ -22,13 +23,28 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post("login")
-  login(@Body() loginDto: LoginDto) {
-    return this.authService.login(loginDto.email, loginDto.password);
+  async login(
+    @Body() loginDto: LoginDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const token = await this.authService.login(
+      loginDto.email,
+      loginDto.password,
+    );
+    res.cookie("token", token, {
+      path: "/api",
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+      maxAge: 3600 * 24 * 1000,
+    });
+    return { message: "Login successful" };
   }
 
   @Get("logout")
-  logout(@Req() req: Request) {
-    return this.authService.logout(req.headers.authorization);
+  async logout(@Req() req: Request) {
+    await this.authService.logout(req.cookies.token);
+    return { message: "Successful sign out" };
   }
 
   @Get("me")

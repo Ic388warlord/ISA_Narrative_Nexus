@@ -30,9 +30,8 @@ export class AuthService {
     return token;
   }
 
-  async logout(authorization: string) {
-    const [type, token] = authorization.split(" ") ?? [];
-    if (type !== "Bearer") throw new UnauthorizedException("Invalid token");
+  async logout(token: string) {
+    if (!token) throw new UnauthorizedException("Invalid token");
     this.redisService.blacklistToken(token);
   }
 
