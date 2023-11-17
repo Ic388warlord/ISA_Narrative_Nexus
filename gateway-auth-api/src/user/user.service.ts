@@ -18,6 +18,15 @@ export class UserService {
     return user;
   }
 
+  async changePassword(email, password) {
+    const salt = genSaltSync(parseInt(this.configService.get("SALT_ROUNDS")));
+    const hash = hashSync(password, salt);
+    await this.prismaService.user.update({
+      where: { email },
+      data: { hash },
+    });
+  }
+
   async createUser(registerDto: RegisterDto) {
     const salt = genSaltSync(parseInt(this.configService.get("SALT_ROUNDS")));
     const hash = hashSync(registerDto.password, salt);
