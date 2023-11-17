@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { User } from "@prisma/client";
@@ -17,8 +17,8 @@ export class AuthService {
     private readonly mailService: MailService,
   ) {}
 
-  async login(email: string, password: string) {
-    const user = await this.userService.findUser(email);
+  async login(username: string, password: string) {
+    const user = await this.userService.findUsername(username);
     if (!user) throw new UnauthorizedException("User does not exist");
 
     const isValid = compareSync(password, user.hash);
@@ -38,15 +38,15 @@ export class AuthService {
   }
 
   async forgotPassword(email: string) {
-    const user = await this.userService.findUser(email);
-    if (!user) throw new UnauthorizedException("User does not exist");
+    const userEmail = await this.userService.findEmail(email);
+    if (!userEmail) throw new NotFoundException("Email does not exist");
 
-    const token = this.jwtService.sign(user, {
+    const token = this.jwtService.sign(userEmail, {
       secret: this.configService.get("JWT_SECRET"),
       expiresIn: this.configService.get("JWT_TOKEN_EXPIRATION"),
     });
 
-    return this.mailService.sendResetEmail(user.email, token);
+    return this.mailService.sendResetEmail(userEmail.email, token);
   }
 
   async verifyResetToken(token: string) {
@@ -67,11 +67,11 @@ export class AuthService {
       const payload = this.jwtService.verify(token, {
         secret: this.configService.get("JWT_SECRET"),
       });
-      const user = await this.userService.findUser(payload.email);
-      if (!user) {
-        return { error: "User does not exist" };
+      const userEmail = await this.userService.findEmail(payload.email);
+      if (!userEmail) {
+        return { error: "Email does not exist" };
       }
-      await this.userService.changePassword(user.email, password);
+      await this.userService.changePassword(userEmail.email, password);
       return { ok: "Password was reset, you can close this page." };
     } catch (err) {
       return { error: "Invalid token" };
@@ -81,6 +81,7 @@ export class AuthService {
   me(user: User) {
     return {
       id: user.id,
+      username: user.username,
       email: user.email,
       role: user.role,
     };

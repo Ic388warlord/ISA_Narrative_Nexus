@@ -8,10 +8,12 @@ datasource db {
 }
 
 model User {
-  id    Int    @id @default(autoincrement())
-  role  Role   @default(USER)
-  email String @default("") @unique
-  hash  String @default("")
+  id        Int    @id @default(autoincrement())
+  username  String @unique @default("")
+  email     String @unique @default("")
+  hash      String @default("")
+  role      Role   @default(USER)
+  firstname String @default("")
 }
 
 enum Role {
