@@ -4,7 +4,10 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
+  Query,
+  Render,
   Req,
   Res,
 } from "@nestjs/common";
@@ -50,5 +53,31 @@ export class AuthController {
   @Get("me")
   me(@Req() req: Request) {
     return this.authService.me(req["user"]);
+  }
+
+  @Public()
+  @Get("forgotpassword/:email")
+  forgotPassword(@Param("email") email: string) {
+    return this.authService.forgotPassword(email);
+  }
+
+  @Public()
+  @Get("reset")
+  @Render("index")
+  sendToResetPage(@Query("token") token: string) {
+    return this.authService.verifyResetToken(token);
+  }
+
+  @Public()
+  @Post("reset")
+  @Render("index")
+  resetPassword(@Query("token") token: string, @Body() body) {
+    console.log(token);
+    console.log(body);
+    return this.authService.resetPassword(
+      token,
+      body.password,
+      body.confirmPassword,
+    );
   }
 }
