@@ -1,10 +1,11 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { createClient } from "redis";
 
 @Injectable()
 export class RedisService {
+  private readonly logger = new Logger(RedisService.name);
   client: ReturnType<typeof createClient>;
 
   constructor(
@@ -19,7 +20,9 @@ export class RedisService {
       },
     });
     this.client = redisClient;
-    this.client.connect().then(() => console.log("Connected to Redis Client"));
+    this.client
+      .connect()
+      .then(() => this.logger.log("Connected to Redis Client"));
   }
 
   async blacklistToken(token: string): Promise<void> {
@@ -28,10 +31,10 @@ export class RedisService {
     });
     const iat = payload.iat;
     const exp = payload.exp;
-    console.log(`${iat} | ${exp}`);
+    this.logger.log(`${iat} | ${exp}`);
 
     const ttl = exp - Math.ceil(Date.now() / 1000);
-    console.log(`Blacklist Token TTL in seconds: ${ttl}`);
+    this.logger.log(`Blacklist Token TTL in seconds: ${ttl}`);
 
     await this.client.set(token, ttl);
     await this.client.expire(token, ttl);
