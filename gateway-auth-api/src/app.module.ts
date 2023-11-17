@@ -6,6 +6,7 @@ import { UserModule } from "./user/user.module";
 import { APP_GUARD } from "@nestjs/core";
 import { AuthGuard, RoleGuard } from "./auth/auth.guard";
 import { RedisModule } from "./redis/redis.module";
+import { MailModule } from "./mail/mail.module";
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { RedisModule } from "./redis/redis.module";
     RedisModule,
     AuthModule,
     UserModule,
+    MailModule,
   ],
   controllers: [],
   providers: [
