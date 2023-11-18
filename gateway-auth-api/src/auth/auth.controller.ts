@@ -15,7 +15,9 @@ import { AuthService } from "./auth.service";
 import { Public } from "./auth.metadata";
 import { LoginDto } from "./dtos/login.dto";
 import { Request, Response } from "express";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
+@ApiTags("Authentication")
 @Controller({
   path: "auth",
   version: "1",
@@ -23,6 +25,15 @@ import { Request, Response } from "express";
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @ApiOperation({
+    summary:
+      "Login in user with email, username, and password. Creates a cookie on client side when successful",
+  })
+  @ApiResponse({
+    status: 200,
+    description: "Successful login, creates a cookie on client side",
+  })
+  @ApiResponse({ status: 403, description: "Invalid login credentials" })
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post("login")
