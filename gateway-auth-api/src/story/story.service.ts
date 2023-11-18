@@ -13,7 +13,7 @@ export class StoryService {
   async generateStory(storyDto: StoryDto): Promise<any> {
     try {
       console.log("Check data: ", storyDto);
-      const response = await axios.post('http://localhost:8000/generate', storyDto);
+      const response = await axios.post('http://localhost:8000/api/v1/generateStory', storyDto);
       return response.data;
     } catch (error) {
       throw error;
