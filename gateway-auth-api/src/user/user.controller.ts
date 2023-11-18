@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Get, Post } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { RegisterDto } from "./dtos/register.dto";
 import { Public } from "src/auth/auth.metadata";
@@ -18,4 +18,10 @@ export class UserController {
     console.log(registerDto);
     return this.userService.createUser(registerDto);
   }
+
+  @Get("getallusers")
+  async getAllUsers() {
+    return this.userService.getAllUsers();
+  }
+
 }
