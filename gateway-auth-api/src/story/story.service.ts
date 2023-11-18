@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import axios from 'axios';
 import { StoryDto } from './dtos/story.dto';
 import { SaveStoryDto } from './dtos/savestory.dto';
@@ -13,7 +13,7 @@ export class StoryService {
   async generateStory(storyDto: StoryDto): Promise<any> {
     try {
       console.log("Check data: ", storyDto);
-      const response = await axios.post('http://localhost:8000/generate', storyDto);
+      const response = await axios.post('http://localhost:8000/api/v1/generateStory', storyDto);
       return response.data;
     } catch (error) {
       throw error;
@@ -50,6 +50,23 @@ export class StoryService {
         genre: newStory.genre,
         updatetime: newStory.updatedat
       };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getUserStories(username: string) {
+    try {
+      const user = await this.primaService.user.findUnique({
+        where: { username },
+        include: { stories: true},
+      });
+
+      if (!user) {
+        throw new NotFoundException('User is not found!');
+      }
+
+      return {stories: user.stories}
     } catch (error) {
       throw error;
     }

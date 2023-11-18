@@ -8,6 +8,7 @@ import { AuthGuard, RoleGuard } from "./auth/auth.guard";
 import { RedisModule } from "./redis/redis.module";
 import { MailModule } from "./mail/mail.module";
 import { StoryModule } from "./story/story.module";
+import { UtilModule } from "./util/util.module";
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { StoryModule } from "./story/story.module";
     UserModule,
     MailModule,
     StoryModule,
+    UtilModule,
   ],
   controllers: [],
   providers: [

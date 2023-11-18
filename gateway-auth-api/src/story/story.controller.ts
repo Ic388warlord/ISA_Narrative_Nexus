@@ -1,6 +1,5 @@
-import {Controller, Post, Body} from "@nestjs/common";
+import {Controller, Post, Body, Get, Param} from "@nestjs/common";
 import {StoryService} from "./story.service";
-import { Public } from "src/auth/auth.metadata";
 import { StoryDto } from "./dtos/story.dto";
 import { ApiTags } from "@nestjs/swagger";
 import { SaveStoryDto } from "./dtos/savestory.dto";
@@ -16,17 +15,20 @@ export class StoryController {
   // private only accessible within the class
   constructor(private storyService:StoryService) {}
 
-  @Public()
   @Post('generatestory')
   async generateStory(@Body() storyDto: StoryDto): Promise<any> {
     console.log("Data value: ", storyDto);
     return this.storyService.generateStory(storyDto);
   }
 
-  @Public()
   @Post('savestory')
   async saveStory(@Body() savestoryDto: SaveStoryDto): Promise<any> {
     console.log("Data value: ", savestoryDto);
     return this.storyService.saveStory(savestoryDto);
+  }
+
+  @Get('getUserStories/:username')
+  async getUserStories(@Param("username") username: string) {
+    return this.storyService.getUserStories(username);
   }
 }

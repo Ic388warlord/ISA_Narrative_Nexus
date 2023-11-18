@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable, InternalServerErrorException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { genSaltSync, hashSync } from "bcrypt";
 import { PrismaService } from "src/prisma/prisma.service";
@@ -57,6 +57,17 @@ export class UserService {
       };
     } catch (err) {
       throw new BadRequestException("User already exists");
+    }
+  }
+
+  async getAllUsers() {
+    try {
+      const userlist = await this.prismaService.user.findMany();
+      return {
+        data: userlist
+      };
+    } catch (err) {
+      throw new InternalServerErrorException("Internal server error fetching users.");
     }
   }
 }
