@@ -16,6 +16,7 @@ import { Public } from "./auth.metadata";
 import { LoginDto } from "./dtos/login.dto";
 import { Request, Response } from "express";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { StringService } from "src/util/util.service";
 
 @ApiTags("Authentication")
 @Controller({
@@ -23,7 +24,10 @@ import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
   version: "1",
 })
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly stringService: StringService,
+  ) {}
 
   @ApiOperation({
     summary:
@@ -52,7 +56,7 @@ export class AuthController {
       secure: true,
       maxAge: 3600 * 24 * 1000,
     });
-    return { message: "Login successful" };
+    return { message: this.stringService.auth.LOGIN_OK };
   }
 
   @Get("logout")
