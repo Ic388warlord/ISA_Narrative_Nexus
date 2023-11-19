@@ -1,6 +1,7 @@
 import os
 import json
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from dotenv import load_dotenv
 from transformers import pipeline
 from openai import OpenAI
@@ -8,6 +9,7 @@ from utils.strings import *
 from utils.utils import *
 
 app = Flask(__name__)
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # Load environment variables from a file called .env
 load_dotenv()
