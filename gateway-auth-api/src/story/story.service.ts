@@ -3,17 +3,19 @@ import axios from 'axios';
 import { StoryDto } from './dtos/story.dto';
 import { SaveStoryDto } from './dtos/savestory.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { StringService } from 'src/util/util.service';
 
 @Injectable()
 export class StoryService {
   constructor(
-    private readonly primaService: PrismaService
+    private readonly primaService: PrismaService,
+    private readonly stringService: StringService
   ) { }
 
   async generateStory(storyDto: StoryDto): Promise<any> {
     try {
-      console.log("Check data: ", storyDto);
-      const response = await axios.post('http://localhost:8000/api/v1/generateStory', storyDto);
+      console.log(this.stringService.story.LOG_DATA, storyDto);
+      const response = await axios.post(this.stringService.story.URL, storyDto);
       return response.data;
     } catch (error) {
       throw error;
@@ -30,11 +32,11 @@ export class StoryService {
       if (!user) {
         return {
           statusCode: 404,
-          message: 'User does not exist',
+          message: this.stringService.story.USER_NOT_FOUND,
         };
       }
 
-      console.log("Check data: ", saveStoryDto);
+      console.log(this.stringService.story.LOG_DATA, saveStoryDto);
       const newStory = await this.primaService.story.create({
         data: {
           username: saveStoryDto.username,
@@ -42,7 +44,7 @@ export class StoryService {
           genre: saveStoryDto.genre,
         },
       });
-      console.log('Created story:', newStory);
+      console.log(this.stringService.story.LOG_STORY, newStory);
       return {
         id: newStory.id,
         username: newStory.username,
@@ -63,7 +65,7 @@ export class StoryService {
       });
 
       if (!user) {
-        throw new NotFoundException('User is not found!');
+        throw new NotFoundException(this.stringService.story.USER_NOT_FOUND);
       }
 
       return {stories: user.stories}

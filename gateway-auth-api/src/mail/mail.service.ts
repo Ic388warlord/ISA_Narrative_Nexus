@@ -1,12 +1,13 @@
 import { Injectable, Logger } from "@nestjs/common";
 import * as nodemailer from "nodemailer";
+import { StringService } from "src/util/util.service";
 
 @Injectable()
 export class MailService {
   private readonly logger = new Logger(MailService.name);
   transporter: nodemailer.Transporter;
 
-  constructor() {
+  constructor( private readonly stringService: StringService) {
     this.logger.log(nodemailer);
     this.transporter = nodemailer.createTransport({
       host: "localhost",
@@ -20,11 +21,11 @@ export class MailService {
 
   async sendResetEmail(email: string, token: string) {
     const mailOptions: nodemailer.SendMailOptions = {
-      from: "narrativenexus@noreply.com",
+      from: this.stringService.mail.FROM_EMAIL,
       to: email,
-      subject: "Password reset",
-      text: `Click this link to reset your password: http://localhost:3000/api/v1/auth/reset?token=${token}`,
-      html: `<p>Click this link to reset your password: <a href='http://localhost:3000/api/v1/auth/reset?token=${token}'>Link</a></p>`,
+      subject: this.stringService.mail.SUBJECT,
+      text: this.stringService.mail.TEXT(token),
+      html: this.stringService.mail.HTML(token),
     };
     try {
       const info = await this.transporter.sendMail(mailOptions);

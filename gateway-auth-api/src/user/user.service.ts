@@ -3,16 +3,18 @@ import { ConfigService } from "@nestjs/config";
 import { genSaltSync, hashSync } from "bcrypt";
 import { PrismaService } from "src/prisma/prisma.service";
 import { RegisterDto } from "./dtos/register.dto";
+import { StringService } from "src/util/util.service";
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly configService: ConfigService,
+    private readonly stringService: StringService,
   ) {}
 
   async findEmail(email: string) {
-    console.log(`Searching for user with email: ${email}`);
+    console.log(this.stringService.user.LOG_EMAIL(email));
     const userEmail = await this.prismaService.user.findUnique({
       where: { email: email },
     });
@@ -56,7 +58,7 @@ export class UserService {
         firstname: newUser.firstname
       };
     } catch (err) {
-      throw new BadRequestException("User already exists");
+      throw new BadRequestException(this.stringService.user.USER_EXIST);
     }
   }
 
@@ -67,7 +69,7 @@ export class UserService {
         data: userlist
       };
     } catch (err) {
-      throw new InternalServerErrorException("Internal server error fetching users.");
+      throw new InternalServerErrorException(this.stringService.user.INTERNAL_USER_ERR);
     }
   }
 }
