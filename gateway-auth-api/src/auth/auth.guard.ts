@@ -12,6 +12,7 @@ import { Request } from "express";
 import { Observable } from "rxjs";
 import { PublicKey, RolesKey } from "./auth.metadata";
 import { RedisService } from "src/redis/redis.service";
+import { StringService } from "src/util/util.service";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -20,6 +21,7 @@ export class AuthGuard implements CanActivate {
     private readonly configService: ConfigService,
     private readonly reflector: Reflector,
     private readonly redisService: RedisService,
+    private readonly stringService: StringService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -33,11 +35,11 @@ export class AuthGuard implements CanActivate {
 
     const token = this.extractTokenFromHeaders(request);
 
-    if (!token) throw new UnauthorizedException("Invalid token");
+    if (!token) throw new UnauthorizedException(this.stringService.auth.INVALID_TOKEN);
 
     const isBlacklisted = await this.redisService.isBlacklistedToken(token);
     if (isBlacklisted) {
-      throw new UnauthorizedException("Invalid token: blacklisted");
+      throw new UnauthorizedException(this.stringService.auth.INVALID_TOKEN_BL);
     }
 
     try {

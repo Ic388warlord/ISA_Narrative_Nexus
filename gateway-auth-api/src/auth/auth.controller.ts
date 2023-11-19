@@ -62,7 +62,7 @@ export class AuthController {
   @Get("logout")
   async logout(@Req() req: Request) {
     await this.authService.logout(req.cookies.token);
-    return { message: "Successful sign out" };
+    return { message: this.stringService.auth.LOGOUT_OK };
   }
 
   @Get("me")
