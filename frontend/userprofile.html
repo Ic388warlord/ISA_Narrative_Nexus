@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header img {
+            width: 200px; /* Adjust the size of the logo as needed */
+        }
+
+        .user-actions {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .user-actions a {
+            text-decoration: none;
+            color: #fff;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+
+        .main-content {
+            text-align: center;
+            padding: 50px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+
+        /* Added style for the back button */
+        header button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div>
+        <button onclick="window.location.href='landing.html'">Back</button>
+    </div>
+
+</header>
+
+<div class="main-content">
+    <h2>User Data</h2>
+    <button onclick="showUserData()">Show All Users</button>
+    <table id="userTable">
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Hash</th>
+            <th>Role</th>
+            <th>Firstname</th>
+            <th>Username</th>
+        </tr>
+    </table>
+</div>
+
+<script>
+    const endPointRoot = "http://localhost:3000"
+
+    function showUserData() {
+        const table = document.getElementById("userTable");
+
+        const xhttp = new XMLHttpRequest();
+        const endPoint = "/api/v1/user/getallusers"
+
+        xhttp.open("GET", endPointRoot + endPoint, true)
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.withCredentials = true;
+        xhttp.send();
+
+        xhttp.onreadystatechange = function () {
+            if (this.readyState === 4) {
+                if (this.status === 200) {
+
+                    table.innerHTML = "<tr><th>ID</th><th>Email</th><th>Hash</th><th>Role</th><th>Firstname</th><th>Username</th></tr>";
+                    const jsonData = JSON.parse(this.response);
+                    console.log(jsonData.data);
+                    
+                    jsonData.data.forEach(user => {
+                        const row = table.insertRow();
+                        row.insertCell(0).innerText = user.id;
+                        row.insertCell(1).innerText = user.email;
+                        row.insertCell(2).innerText = user.hash
+                        row.insertCell(3).innerText = user.role;
+                        row.insertCell(4).innerText = user.firstname;
+                        row.insertCell(5).innerText = user.username;
+                    })
+                }
+            }
+        }
+
+        // // Fetch user data from the API
+        // fetch('https://your-api-endpoint/users')
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         // Clear existing table rows
+        //         table.innerHTML = "<tr><th>ID</th><th>Email</th><th>Role</th><th>Firstname</th><th>Username</th></tr>";
+
+        //         // Populate the table with user data
+        //         data.forEach(user => {
+        //             const row = table.insertRow();
+        //             row.insertCell(0).innerText = user.id;
+        //             row.insertCell(1).innerText = user.email;
+        //             row.insertCell(2).innerText = user.role;
+        //             row.insertCell(3).innerText = user.firstname;
+        //             row.insertCell(4).innerText = user.username;
+        //         });
+        //     })
+        //     .catch(error => console.error('Error fetching user data:', error));
+    }
+</script>
+
+</body>
+</html>
