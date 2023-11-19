@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { User } from "@prisma/client";
@@ -21,10 +25,16 @@ export class AuthService {
 
   async login(username: string, password: string) {
     const user = await this.userService.findUsername(username);
-    if (!user) throw new UnauthorizedException(this.stringService.auth.USER_DOES_NOT_EXIST);
+    if (!user)
+      throw new UnauthorizedException(
+        this.stringService.auth.USER_DOES_NOT_EXIST,
+      );
 
     const isValid = compareSync(password, user.hash);
-    if (!isValid) throw new UnauthorizedException(this.stringService.auth.INVALID_CREDENTIALS);
+    if (!isValid)
+      throw new UnauthorizedException(
+        this.stringService.auth.INVALID_CREDENTIALS,
+      );
 
     const token = this.jwtService.signAsync(user, {
       secret: this.configService.get("JWT_SECRET"),
@@ -35,13 +45,15 @@ export class AuthService {
   }
 
   async logout(token: string) {
-    if (!token) throw new UnauthorizedException(this.stringService.auth.INVALID_TOKEN);
+    if (!token)
+      throw new UnauthorizedException(this.stringService.auth.INVALID_TOKEN);
     this.redisService.blacklistToken(token);
   }
 
   async forgotPassword(email: string) {
     const userEmail = await this.userService.findEmail(email);
-    if (!userEmail) throw new NotFoundException(this.stringService.auth.EMAIL_DOES_NOT_EXIST);
+    if (!userEmail)
+      throw new NotFoundException(this.stringService.auth.EMAIL_DOES_NOT_EXIST);
 
     const token = this.jwtService.sign(userEmail, {
       secret: this.configService.get("JWT_SECRET"),
@@ -63,7 +75,8 @@ export class AuthService {
   }
 
   async resetPassword(token, password, confirmPassword) {
-    if (password !== confirmPassword) return { error: this.stringService.auth.UNMATCH_PASSWORD };
+    if (password !== confirmPassword)
+      return { error: this.stringService.auth.UNMATCH_PASSWORD };
 
     try {
       const payload = this.jwtService.verify(token, {
