@@ -1,4 +1,5 @@
 import { Injectable, Logger } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import * as nodemailer from "nodemailer";
 import { StringService } from "src/util/util.service";
 
@@ -7,14 +8,17 @@ export class MailService {
   private readonly logger = new Logger(MailService.name);
   transporter: nodemailer.Transporter;
 
-  constructor( private readonly stringService: StringService) {
+  constructor(
+    private readonly stringService: StringService,
+    private readonly configService: ConfigService,
+  ) {
     this.logger.log(nodemailer);
     this.transporter = nodemailer.createTransport({
-      host: "localhost",
-      port: 1025,
+      host: "smtp.ethereal.email",
+      port: 587,
       auth: {
-        user: "project.1",
-        pass: "secret.1",
+        user: configService.get("SMTP_USER"),
+        pass: configService.get("SMTP_PASSWORD"),
       },
     });
   }
