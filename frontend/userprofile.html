@@ -109,20 +109,7 @@
       checkUserInfo()
         .then((info) => {
           console.log("User Role:", info.role);
-
           showInfo(info);
-
-          if (info.role.toUpperCase() === "ADMIN") {
-            console.log("User has ADMIN role. Showing the button.");
-            document.getElementById("adminData").style.display = "inline-block";
-            showUserData();
-            // document.getElementById("showUsersBtn").style.display =
-            //   "inline-block";
-            // Optionally, you can also call showUserData() here if you want to fetch and display data immediately.
-          } else {
-            console.log("User does not have ADMIN role. Hiding the button.");
-            document.getElementById("adminData").style.display = "none";
-          }
         })
         .catch((error) => console.error("Error checking user role:", error));
 
@@ -144,35 +131,6 @@
         userInfoDiv.appendChild(userDiv);
       }
 
-      function showUserData() {
-        const table = document.getElementById("userTable");
-
-        const endPoint = "/api/v1/user/getallusers";
-
-        fetch(endPointRoot + endPoint, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        })
-          .then((response) => response.json())
-          .then((jsonData) => {
-            table.innerHTML =
-              "<tr><th>ID</th><th>Email</th><th>Hash</th><th>Role</th><th>Firstname</th><th>Username</th></tr>";
-
-            jsonData.data.forEach((user) => {
-              const row = table.insertRow();
-              row.insertCell(0).innerText = user.id;
-              row.insertCell(1).innerText = user.email;
-              row.insertCell(2).innerText = user.hash;
-              row.insertCell(3).innerText = user.role;
-              row.insertCell(4).innerText = user.firstname;
-              row.insertCell(5).innerText = user.username;
-            });
-          })
-          .catch((error) => console.error("Error fetching user data:", error));
-      }
 
       function checkUserInfo() {
         return fetch(endPointRoot + "/api/v1/auth/me", {
