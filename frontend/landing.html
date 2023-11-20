@@ -79,6 +79,8 @@
       <br />
       <br />
       <div id="scenarios"></div>
+
+      <div id="feedback"></div>
     </div>
 
     <script>
@@ -194,6 +196,7 @@
       }
 
       function saveStory() {
+        const feedback = document.getElementById("feedback")
         const generatedText = document.getElementById("generatedText").innerText;
         savedStory = generatedText;
         const xhttp = new XMLHttpRequest();
@@ -211,9 +214,9 @@
 
         xhttp.onreadystatechange = function () {
           if (this.readyState === 4) {
-            if (this.status === 200) {
+            if (this.status === 201) {
               const jsonData = JSON.parse(this.response);
-              console.log(jsonData);
+              feedback.innerText = `${jsonData.id} ${jsonData.story} ${jsonData.genre} ${jsonData.updatetime}`;
             }
           }
         };
