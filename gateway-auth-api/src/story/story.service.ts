@@ -1,16 +1,17 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import axios from 'axios';
-import { StoryDto } from './dtos/story.dto';
-import { SaveStoryDto } from './dtos/savestory.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { StringService } from 'src/util/util.service';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import axios from "axios";
+import { StoryDto } from "./dtos/story.dto";
+import { SaveStoryDto } from "./dtos/savestory.dto";
+import { PrismaService } from "src/prisma/prisma.service";
+import { StringService } from "src/util/util.service";
+import { EditStoryDto } from "./dtos/editstory.dto";
 
 @Injectable()
 export class StoryService {
   constructor(
-    private readonly primaService: PrismaService,
-    private readonly stringService: StringService
-  ) { }
+    private readonly prismaService: PrismaService,
+    private readonly stringService: StringService,
+  ) {}
 
   async generateStory(storyDto: StoryDto): Promise<any> {
     try {
@@ -18,6 +19,33 @@ export class StoryService {
       const response = await axios.post(this.stringService.story.URL, storyDto);
       return response.data;
     } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  async editStory(editStoryDto: EditStoryDto): Promise<any> {
+    try {
+      const existingStory = await this.prismaService.story.findUnique({
+        where: {
+          id: editStoryDto.storyid,
+        },
+      });
+
+      if (!existingStory) {
+        throw new NotFoundException(this.stringService.story.STORY_NOT_FOUND);
+      }
+
+      const updatedStory = await this.prismaService.story.update({
+        where: { id: editStoryDto.storyid },
+        data: { story: editStoryDto.story },
+      });
+      return {
+        message: this.stringService.story.UPDATED_STORY_MSG,
+        updatedStory: updatedStory,
+      };
+    } catch (error) {
+      console.log(error);
       throw error;
     }
   }
@@ -25,7 +53,7 @@ export class StoryService {
   async saveStory(saveStoryDto: SaveStoryDto): Promise<any> {
     try {
       // Check user in database
-      const user = await this.primaService.user.findUnique({
+      const user = await this.prismaService.user.findUnique({
         where: { username: saveStoryDto.username },
       });
 
@@ -37,9 +65,10 @@ export class StoryService {
       }
 
       console.log(this.stringService.story.LOG_DATA, saveStoryDto);
-      const newStory = await this.primaService.story.create({
+      const newStory = await this.prismaService.story.create({
         data: {
           username: saveStoryDto.username,
+          title: saveStoryDto.title,
           story: saveStoryDto.story,
           genre: saveStoryDto.genre,
         },
@@ -50,7 +79,7 @@ export class StoryService {
         username: newStory.username,
         story: newStory.story,
         genre: newStory.genre,
-        updatetime: newStory.updatedat
+        updatetime: newStory.updatedat,
       };
     } catch (error) {
       throw error;
@@ -59,16 +88,16 @@ export class StoryService {
 
   async getUserStories(username: string) {
     try {
-      const user = await this.primaService.user.findUnique({
+      const user = await this.prismaService.user.findUnique({
         where: { username },
-        include: { stories: true},
+        include: { stories: true },
       });
 
       if (!user) {
         throw new NotFoundException(this.stringService.story.USER_NOT_FOUND);
       }
 
-      return {stories: user.stories}
+      return { stories: user.stories };
     } catch (error) {
       throw error;
     }

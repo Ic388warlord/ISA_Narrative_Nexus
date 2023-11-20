@@ -52,6 +52,8 @@ export class StringService {
     LOG_STORY: "Created story:",
     USER_NOT_FOUND: "User does not exist",
     URL: "https://isa.stevenchow.ca/api/v1/generateStory",
+    STORY_NOT_FOUND: "Story is not found for the user.",
+    UPDATED_STORY_MSG: "Story has been updated.",
   };
   readonly user = {
     LOG_EMAIL: (email: string) => `Searching for user with email: ${email}`,
