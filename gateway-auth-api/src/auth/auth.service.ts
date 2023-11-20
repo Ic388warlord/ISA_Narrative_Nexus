@@ -57,7 +57,7 @@ export class AuthService {
 
     const token = this.jwtService.sign(userEmail, {
       secret: this.configService.get("JWT_SECRET"),
-      expiresIn: this.configService.get("JWT_TOKEN_EXPIRATION"),
+      expiresIn: "20m",
     });
 
     return this.mailService.sendResetEmail(userEmail.email, token);
