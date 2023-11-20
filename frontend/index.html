@@ -3,15 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
+    <title>Narative Nexus</title>
     <style>
       body {
         font-family: Arial, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;  
       }
+      
       form {
         max-width: 300px;
         margin: 20px auto;
       }
+
+      #welcome {
+        font-size: 24px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* You can replace this with any preferred font-family */
+        color: #333; /* Adjust the color as needed */
+        margin-bottom: 20px;
+      }
+
       input {
         width: 100%;
         padding: 8px;
@@ -20,6 +34,7 @@
         border: 1px solid #ccc;
         box-sizing: border-box;
       }
+
       button {
         background-color: #4caf50;
         color: white;
@@ -28,25 +43,28 @@
         border-radius: 4px;
         cursor: pointer;
       }
+
       button:hover {
         background-color: #45a049;
       }
     </style>
   </head>
   <body>
-    <form id="loginForm">
-      <h2>Login</h2>
-      <label for="loginUsername">Username:</label>
-      <input type="text" id="loginUsername" name="loginUsername" required />
-
-      <label for="loginPassword">Password:</label>
-      <input type="password" id="loginPassword" name="loginPassword" required />
-
-      <button type="button" onclick="login()">Login</button>
-      <button type="button" onclick="window.location.href='password.html'">Forgot Password</button>
-
-      <p>Don't have an account? <a href="registration.html">Sign Up</a></p>
-    </form>
+    <div style="text-align: center;">
+      <form id="loginForm">
+        <p id="welcome">Welcome to Narative Nexus</p>
+        <label for="loginUsername">Username:</label>
+        <input type="text" id="loginUsername" name="loginUsername" required />
+  
+        <label for="loginPassword">Password:</label>
+        <input type="password" id="loginPassword" name="loginPassword" required />
+  
+        <button type="button" onclick="login()">Login</button>
+        <button type="button" onclick="window.location.href='password.html'">Forgot Password</button>
+  
+        <p>Don't have an account? <a href="registration.html">Sign Up</a></p>
+      </form>
+    </div>
 
     <script>
       const endPointRoot = "https://jdefazmxvy.us18.qoddiapp.com";
