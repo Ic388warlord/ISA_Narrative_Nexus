@@ -12,6 +12,9 @@
         justify-content: center;
         height: 100vh;
         margin: 0;  
+        background-image: url('./assets/img/narrative_nexus.jpg');
+        background-size: cover; /* Adjust as needed */
+        background-position: center; /* Adjust as needed */
       }
       
       form {
@@ -22,8 +25,16 @@
       #welcome {
         font-size: 24px;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* You can replace this with any preferred font-family */
-        color: #333; /* Adjust the color as needed */
+        color: #fffbfb; /* Adjust the color as needed */
         margin-bottom: 20px;
+      }
+
+      #signup {
+        color: #fffbfb;
+      }
+
+      #signup_button {
+        color: rgb(53, 159, 194);
       }
 
       input {
@@ -43,7 +54,7 @@
         border-radius: 4px;
         cursor: pointer;
       }
-
+      
       button:hover {
         background-color: #45a049;
       }
@@ -53,16 +64,16 @@
     <div style="text-align: center;">
       <form id="loginForm">
         <p id="welcome">Welcome to Narative Nexus</p>
-        <label for="loginUsername">Username:</label>
-        <input type="text" id="loginUsername" name="loginUsername" required />
+        <!-- <label for="loginUsername">Username:</label> -->
+        <input type="text" id="loginUsername" name="loginUsername"  placeholder="Enter your username" required />
   
-        <label for="loginPassword">Password:</label>
-        <input type="password" id="loginPassword" name="loginPassword" required />
+        <!-- <label for="loginPassword">Password:</label> -->
+        <input type="password" id="loginPassword" name="loginPassword"  placeholder="Enter your password" required />
   
         <button type="button" onclick="login()">Login</button>
         <button type="button" onclick="window.location.href='password.html'">Forgot Password</button>
   
-        <p>Don't have an account? <a href="registration.html">Sign Up</a></p>
+        <p id="signup">Don't have an account? <a href="registration.html" id="signup_button">Sign Up</a></p>
       </form>
     </div>
 
