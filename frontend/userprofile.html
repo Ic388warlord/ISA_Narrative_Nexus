@@ -108,6 +108,12 @@
 
       checkUserInfo()
         .then((info) => {
+
+          if (info.statusCode == 401) {
+            window.location.href = "index.html";
+          }
+
+
           console.log("User Role:", info.role);
           showInfo(info);
         })
