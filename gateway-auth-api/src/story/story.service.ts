@@ -77,6 +77,7 @@ export class StoryService {
       return {
         id: newStory.id,
         username: newStory.username,
+        title: newStory.title,
         story: newStory.story,
         genre: newStory.genre,
         updatetime: newStory.updatedat,
