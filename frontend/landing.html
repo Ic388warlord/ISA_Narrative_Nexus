@@ -6,7 +6,7 @@
     <title>Narrative Nexus</title>
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; font-src 'self' data: fonts.gstatic.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self' http://localhost:3000"
+      content="default-src 'self'; font-src 'self' data: fonts.gstatic.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self' https://jdefazmxvy.us18.qoddiapp.com"
     />
 
     <style>
@@ -70,6 +70,7 @@
       <h1>Welcome to Narrative Nexus</h1>
       <p>Explore the power of storytelling with us.</p>
       <button onclick="generateStory()">Generate Story</button>
+      <button onclick="saveStory()">Save Story</button>
       <br />
       <br />
 
@@ -81,7 +82,16 @@
     </div>
 
     <script>
-      const endPointRoot = "http://localhost:3000";
+      const endPointRoot = "https://jdefazmxvy.us18.qoddiapp.com";
+      let savedStory = "";
+
+      let userData = "";
+
+      getUsersInfo()
+        .then((data) => {
+            userData = data
+        })
+
 
       function logout() {
         const xhttp = new XMLHttpRequest();
@@ -117,14 +127,12 @@
         };
 
         if (params) {
-            data.sentence = params
-            data.genre = "superhero"
+          data.sentence = params;
+          data.genre = "superhero";
         } else {
-            data.sentence = "I am Batman, "
-            data.genre = "superhero"
+          data.sentence = "I am Batman, ";
+          data.genre = "superhero";
         }
-
-        
 
         xhttp.open("POST", endPointRoot + endPoint, true);
         xhttp.setRequestHeader("Content-Type", "application/json");
@@ -138,6 +146,12 @@
             if (this.status === 201) {
               const jsonData = JSON.parse(this.response);
               console.log("Return data: ", jsonData);
+
+            //   let sentenceGenerated = jsonData[0].generated_text;
+
+            //   if (!sentenceGenerated.endsWith(".")) {
+            //     sentenceGenerated += ".";
+            //   }
 
               generatedTextElement.innerHTML = jsonData[0].generated_text;
 
@@ -153,13 +167,62 @@
         };
       }
 
+
+
       function combineAndLog(scenarioText) {
         const generatedText =
           document.getElementById("generatedText").innerText;
-        const combinedText = generatedText + " " + scenarioText;
+        const combinedText = `${generatedText} ${scenarioText}`;
         console.log(combinedText);
         generateStory(combinedText);
       }
+
+      function getUsersInfo() {
+        return fetch(endPointRoot + "/api/v1/auth/me", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        })
+          .then((response) => response.json())
+          .then((jsonData) => jsonData)
+          .catch((error) => {
+            console.error("Error checking user role:", error);
+            return jsonData;
+          });
+      }
+
+      function saveStory() {
+        const generatedText = document.getElementById("generatedText").innerText;
+        savedStory = generatedText;
+        const xhttp = new XMLHttpRequest();
+        const endPoint = "/api/v1/story/savestory";
+        xhttp.open("POST", endPointRoot + endPoint, true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.withCredentials = true;
+
+        const savedData = {
+            story: savedStory,
+            genre: "superhero",
+            username: userData.username
+        }
+        xhttp.send(JSON.stringify(savedData))
+
+        xhttp.onreadystatechange = function () {
+          if (this.readyState === 4) {
+            if (this.status === 200) {
+              const jsonData = JSON.parse(this.response);
+              console.log(jsonData);
+            }
+          }
+        };
+
+
+
+      }
+
+
     </script>
   </body>
 </html>
