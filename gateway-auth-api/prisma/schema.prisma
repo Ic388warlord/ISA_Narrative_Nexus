@@ -19,15 +19,23 @@ model User {
 
 model Story {
   id        Int      @id @default(autoincrement())
-  title     String   @default("")
   story     String
   genre     String
   username  String
   updatedat DateTime @updatedAt
+  title     String   @default("")
   user      User     @relation(fields: [username], references: [username])
 }
 
 enum Role {
   USER
   ADMIN
+}
+
+enum HttpMethod {
+  GET
+  POST
+  DELETE
+  PUT
+  PATCH
 }
