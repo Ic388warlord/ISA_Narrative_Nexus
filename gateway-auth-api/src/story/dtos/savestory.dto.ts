@@ -9,4 +9,7 @@ export class SaveStoryDto {
 
   @IsNotEmpty()
   username: string;
+
+  @IsNotEmpty()
+  title: string;
 }

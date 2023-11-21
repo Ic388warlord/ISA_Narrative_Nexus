@@ -8,13 +8,14 @@ datasource db {
 }
 
 model User {
-  id        Int     @id @default(autoincrement())
-  email     String  @unique @default("")
-  hash      String  @default("")
-  role      Role    @default(USER)
-  firstname String  @default("")
-  username  String  @unique @default("")
-  stories   Story[]
+  id               Int     @id @default(autoincrement())
+  email            String  @unique @default("")
+  hash             String  @default("")
+  role             Role    @default(USER)
+  firstname        String  @default("")
+  username         String  @unique @default("")
+  stories          Story[]
+  userrequestcount UserRequestCount[]
 }
 
 model Story {
@@ -23,10 +24,33 @@ model Story {
   genre     String
   username  String
   updatedat DateTime @updatedAt
+  title     String   @default("")
   user      User     @relation(fields: [username], references: [username])
+}
+
+model UserRequestCount {
+  id        Int      @id @default(autoincrement())
+  count     Int
+  username  String
+  user      User     @relation(fields: [username], references: [username])
+}
+
+model Endpoint {
+  id        Int      @id @default(autoincrement())
+  method    HttpMethod
+  name      String
+  count     Int
 }
 
 enum Role {
   USER
   ADMIN
+}
+
+enum HttpMethod {
+  GET
+  POST
+  DELETE
+  PUT
+  PATCH
 }
