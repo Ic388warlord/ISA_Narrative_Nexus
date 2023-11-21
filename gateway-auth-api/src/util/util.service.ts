@@ -56,6 +56,8 @@ export class StringService {
     UPDATED_STORY_MSG: "Story has been updated.",
     DELETED_STORY_MSG: "Story has been deleted",
     PRISMA_ERROR_CODE: "P2025", // Record to delete does not exist, chatgpt lookup of error code handle
+    INVALID_STORYID: "Invalid story ID given.",
+    STORY_FOUND: "successful retrieval of user's story",
   };
   readonly user = {
     LOG_EMAIL: (email: string) => `Searching for user with email: ${email}`,

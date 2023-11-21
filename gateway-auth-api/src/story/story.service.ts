@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from "@nestjs/common";
 import axios from "axios";
 import { StoryDto } from "./dtos/story.dto";
 import { SaveStoryDto } from "./dtos/savestory.dto";
@@ -119,6 +123,29 @@ export class StoryService {
       }
 
       return { stories: user.stories };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getUserStory(storyid: number) {
+    try {
+      if (isNaN(storyid) || storyid <= 0) {
+        throw new BadRequestException(this.stringService.story.INVALID_STORYID);
+      }
+
+      const story = await this.prismaService.story.findUnique({
+        where: { id: storyid },
+      });
+
+      if (!story) {
+        throw new NotFoundException(this.stringService.story.STORY_NOT_FOUND);
+      }
+
+      return {
+        message: this.stringService.story.STORY_FOUND,
+        storyinfo: story,
+      };
     } catch (error) {
       throw error;
     }

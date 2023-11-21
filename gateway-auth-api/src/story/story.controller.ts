@@ -45,6 +45,11 @@ export class StoryController {
     return this.storyService.getUserStories(username);
   }
 
+  @Get("getUserStory/:storyid")
+  async getUserStory(@Param("storyid") storyid: number) {
+    return this.storyService.getUserStory(+storyid);
+  }
+
   @Patch("editstory")
   async editStory(@Body() editStoryDto: EditStoryDto): Promise<any> {
     console.log(this.stringService.story.LOG_DATA, editStoryDto);
