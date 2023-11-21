@@ -74,6 +74,7 @@
         <button type="button" onclick="window.location.href='password.html'">Forgot Password</button>
   
         <p id="signup">Don't have an account? <a href="registration.html" id="signup_button">Sign Up</a></p>
+        <div id="feedback" style="color: white"></div>
       </form>
     </div>
 
@@ -104,6 +105,10 @@
 
               // Redirect to landing.html after successful login
               window.location.href = "landing.html";
+            } else {
+
+              const feedback = document.getElementById("feedback");
+              feedback.innerText = "Invalid entry, either invalid password or nonexistent username.";
             }
           }
         };
