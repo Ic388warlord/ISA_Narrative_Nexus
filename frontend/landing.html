@@ -132,10 +132,14 @@
         <textarea id="textarea_story" cols="100" rows="15"></textarea>
 
         <br />
-        <button onclick="generateStory()">Generate Story</button>
+        <button id="button_generate_story" onclick="generateStory()">Generate Story</button>
         <button onclick="saveStory()">Save Story</button>
         <br />
         <br />
+
+        <div id='div_generating' style="display: none;">
+          monkeys are thinking...
+        </div> 
 
         <div id="generatedText"></div>
 
@@ -217,19 +221,26 @@
         // references to the story and genre
         const TEXTAREA_STORY = document.getElementById("textarea_story");
         const SELECT_GENRE = document.getElementById("select_genre");
-        const DIV_RADIO_BUTTONS = document.getElementById(
-          "radio_button_scenarios"
-        );
-
+        const DIV_RADIO_BUTTONS = document.getElementById("radio_button_scenarios");
+        const BUTTON_GENERATE_STORY = document.getElementById("button_generate_story");
+        const DIV_GENERATING = document.getElementById("div_generating");
         const generatedTextElement = document.getElementById("generatedText");
         const scenariosElement = document.getElementById("scenarios");
 
+        // Get values
         const current_story = TEXTAREA_STORY.value;
         const current_genre = SELECT_GENRE.value;
+
+        // Disable button to prevent spamming
+        BUTTON_GENERATE_STORY.disabled = true;
+        // Show api call indicator;
+        DIV_GENERATING.style.display = 'block';
 
         // User has not given any input
         if (current_story.length < 1) {
           alert("Enter some input.");
+          BUTTON_GENERATE_STORY.disabled = false;
+          DIV_GENERATING.style.display = 'none';
         } else {
           // Set the data for the post request
           const data = {
@@ -280,6 +291,12 @@
                   updated_story,
                   TEXTAREA_STORY
                 );
+
+                BUTTON_GENERATE_STORY.disabled = false;
+                DIV_GENERATING.style.display = 'none';
+              } else {
+                BUTTON_GENERATE_STORY.disabled = false;
+                DIV_GENERATING.style.display = 'none';
               }
             }
           };
