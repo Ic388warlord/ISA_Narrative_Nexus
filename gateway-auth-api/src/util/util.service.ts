@@ -54,6 +54,8 @@ export class StringService {
     URL: "https://isa.stevenchow.ca/api/v1/generateStory",
     STORY_NOT_FOUND: "Story is not found for the user.",
     UPDATED_STORY_MSG: "Story has been updated.",
+    DELETED_STORY_MSG: "Story has been deleted",
+    PRISMA_ERROR_CODE: "P2025", // Record to delete does not exist, chatgpt lookup of error code handle
   };
   readonly user = {
     LOG_EMAIL: (email: string) => `Searching for user with email: ${email}`,

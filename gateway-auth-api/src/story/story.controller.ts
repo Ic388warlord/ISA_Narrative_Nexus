@@ -1,10 +1,19 @@
-import { Controller, Post, Body, Get, Param, Patch } from "@nestjs/common";
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Patch,
+  Delete,
+} from "@nestjs/common";
 import { StoryService } from "./story.service";
 import { StoryDto } from "./dtos/story.dto";
 import { ApiTags } from "@nestjs/swagger";
 import { SaveStoryDto } from "./dtos/savestory.dto";
 import { StringService } from "src/util/util.service";
 import { EditStoryDto } from "./dtos/editstory.dto";
+import { DeleteStoryDto } from "./dtos/deleteStory.dto";
 
 @ApiTags("story")
 @Controller({
@@ -40,5 +49,11 @@ export class StoryController {
   async editStory(@Body() editStoryDto: EditStoryDto): Promise<any> {
     console.log(this.stringService.story.LOG_DATA, editStoryDto);
     return this.storyService.editStory(editStoryDto);
+  }
+
+  @Delete("deletestory")
+  async deleteStory(@Body() deleteStoryDto: DeleteStoryDto): Promise<any> {
+    console.log(this.stringService.story.LOG_DATA, deleteStoryDto);
+    return this.storyService.deleteStory(deleteStoryDto);
   }
 }

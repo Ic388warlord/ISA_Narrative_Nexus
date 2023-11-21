@@ -5,6 +5,7 @@ import { SaveStoryDto } from "./dtos/savestory.dto";
 import { PrismaService } from "src/prisma/prisma.service";
 import { StringService } from "src/util/util.service";
 import { EditStoryDto } from "./dtos/editstory.dto";
+import { DeleteStoryDto } from "./dtos/deleteStory.dto";
 
 @Injectable()
 export class StoryService {
@@ -46,6 +47,25 @@ export class StoryService {
       };
     } catch (error) {
       console.log(error);
+      throw error;
+    }
+  }
+
+  async deleteStory(deleteStoryDto: DeleteStoryDto): Promise<any> {
+    try {
+      const deletedStory = await this.prismaService.story.delete({
+        where: { id: deleteStoryDto.storyid },
+      });
+
+      return {
+        message: this.stringService.story.DELETED_STORY_MSG,
+        deletedStory: deletedStory,
+      };
+    } catch (error) {
+      if (error.code === this.stringService.story.PRISMA_ERROR_CODE) {
+        throw new NotFoundException(this.stringService.story.STORY_NOT_FOUND);
+      }
+      console.error(error);
       throw error;
     }
   }
