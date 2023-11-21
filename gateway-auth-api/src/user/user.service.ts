@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { genSaltSync, hashSync } from "bcrypt";
 import { PrismaService } from "src/prisma/prisma.service";
@@ -41,7 +45,7 @@ export class UserService {
     const salt = genSaltSync(parseInt(this.configService.get("SALT_ROUNDS")));
     const hash = hashSync(registerDto.password, salt);
     try {
-      console.log('Received registerDto:', registerDto);
+      console.log("Received registerDto:", registerDto);
       const newUser = await this.prismaService.user.create({
         data: {
           username: registerDto.username,
@@ -50,12 +54,12 @@ export class UserService {
           hash: hash,
         },
       });
-      console.log('Created user:', newUser);
+      console.log("Created user:", newUser);
       return {
         id: newUser.id,
         username: newUser.username,
         email: newUser.email,
-        firstname: newUser.firstname
+        firstname: newUser.firstname,
       };
     } catch (err) {
       throw new BadRequestException(this.stringService.user.USER_EXIST);
@@ -66,10 +70,12 @@ export class UserService {
     try {
       const userlist = await this.prismaService.user.findMany();
       return {
-        data: userlist
+        data: userlist,
       };
     } catch (err) {
-      throw new InternalServerErrorException(this.stringService.user.INTERNAL_USER_ERR);
+      throw new InternalServerErrorException(
+        this.stringService.user.INTERNAL_USER_ERR,
+      );
     }
   }
 }
