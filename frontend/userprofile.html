@@ -3,7 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Page</title>
+    <title>User Profile</title>
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js"></script>
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -75,6 +83,17 @@
         border-radius: 5px;
         cursor: pointer;
       }
+
+      /* Style for the user stories slider */
+      #userStoriesSlider {
+        margin-top: 20px;
+      }
+
+      #userStoriesSlider p {
+        margin: 0;
+        padding: 10px;
+        border: 1px solid #ddd;
+      }
     </style>
   </head>
   <body>
@@ -101,27 +120,58 @@
           </tr>
         </table>
       </div>
+
+      <!-- User stories slider container -->
+      <div id="userStoriesSlider">
+        <!-- User stories will be displayed here -->
+      </div>
     </div>
 
     <script>
       const endPointRoot = "https://jdefazmxvy.us18.qoddiapp.com";
 
       checkUserInfo()
-        .then((info) => {
-
+        .then(async (info) => {
           if (info.statusCode == 401) {
             window.location.href = "index.html";
           }
 
+          const stories = await getUserStories(info);
 
-          console.log("User Role:", info.role);
-          showInfo(info);
+          showInfo(info, stories.stories);
         })
         .catch((error) => console.error("Error checking user role:", error));
 
-      function showInfo(info) {
+      // Add this function to fetch user stories
+      async function getUserStories(info) {
+        const endPoint = `/api/v1/story/getUserStories/${info.username}`;
+
+        try {
+          const response = await fetch(endPointRoot + endPoint, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          });
+
+          if (!response.ok) {
+            throw new Error(
+              `Error fetching user stories. Status: ${response.status}`
+            );
+          }
+
+          const jsonData = await response.json();
+          return jsonData || []; // Return an empty array if stories is undefined
+        } catch (error) {
+          console.error("Error fetching user stories:", error);
+          return []; // Return an empty array on error
+        }
+      }
+
+      // Update the showInfo function to include user stories
+      async function showInfo(info, stories) {
         const userInfoDiv = document.getElementById("userInfoDiv");
-        console.log(info)
 
         // Create a div to hold user information
         const userDiv = document.createElement("div");
@@ -135,8 +185,33 @@
 
         // Append the userDiv to userInfoDiv
         userInfoDiv.appendChild(userDiv);
-      }
 
+        // Fetch and display user stories
+        // const userStories = await getUserStories();
+        const userStoriesSlider = document.getElementById("userStoriesSlider");
+        // console.log(userStories);
+
+        // Create a div to hold user stories
+        const storiesDiv = document.createElement("div");
+
+        console.log(stories);
+
+        // // Populate user stories
+        stories.forEach((story) => {
+          storiesDiv.innerHTML += `<p>${story.story}</p>`;
+        });
+
+        // // // Append the storiesDiv to userStoriesSlider
+        userStoriesSlider.appendChild(storiesDiv);
+
+        // // // Initialize Slick slider
+        $("#userStoriesSlider").slick({
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          autoplay: true,
+          autoplaySpeed: 2000,
+        });
+      }
 
       function checkUserInfo() {
         return fetch(endPointRoot + "/api/v1/auth/me", {
