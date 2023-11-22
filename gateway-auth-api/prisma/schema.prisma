@@ -8,12 +8,12 @@ datasource db {
 }
 
 model User {
-  id               Int     @id @default(autoincrement())
-  email            String  @unique @default("")
-  hash             String  @default("")
-  role             Role    @default(USER)
-  firstname        String  @default("")
-  username         String  @unique @default("")
+  id               Int                @id @default(autoincrement())
+  email            String             @unique @default("")
+  hash             String             @default("")
+  role             Role               @default(USER)
+  firstname        String             @default("")
+  username         String             @unique @default("")
   stories          Story[]
   userrequestcount UserRequestCount[]
 }
@@ -29,17 +29,17 @@ model Story {
 }
 
 model UserRequestCount {
-  id        Int      @id @default(autoincrement())
-  count     Int
-  username  String
-  user      User     @relation(fields: [username], references: [username])
+  id       Int    @id @default(autoincrement())
+  count    Int
+  username String
+  user     User   @relation(fields: [username], references: [username])
 }
 
 model Endpoint {
-  id        Int      @id @default(autoincrement())
-  method    HttpMethod
-  name      String
-  count     Int
+  id     Int        @id @default(autoincrement())
+  method HttpMethod
+  name   String     @unique
+  count  Int
 }
 
 enum Role {

@@ -9,6 +9,7 @@ import { RedisModule } from "./redis/redis.module";
 import { MailModule } from "./mail/mail.module";
 import { StoryModule } from "./story/story.module";
 import { UtilModule } from "./util/util.module";
+import { EndpointModule } from "./endpoint/endpoint.module";
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { UtilModule } from "./util/util.module";
     MailModule,
     StoryModule,
     UtilModule,
+    EndpointModule,
   ],
   controllers: [],
   providers: [

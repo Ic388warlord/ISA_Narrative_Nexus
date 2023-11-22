@@ -5,6 +5,7 @@ import { JwtModule } from "@nestjs/jwt";
 import { UserModule } from "src/user/user.module";
 import { RedisModule } from "src/redis/redis.module";
 import { MailModule } from "src/mail/mail.module";
+import { EndpointModule } from "src/endpoint/endpoint.module";
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { MailModule } from "src/mail/mail.module";
     UserModule,
     RedisModule,
     MailModule,
+    EndpointModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],

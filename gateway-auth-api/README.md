@@ -14,7 +14,7 @@ $ npm install
 npx prisma migrate dev --name <message>
 
 # get schema update from db
-nxp prisma db pull
+npx prisma db pull
 
 # get schema types for development
 npx prisma generate
