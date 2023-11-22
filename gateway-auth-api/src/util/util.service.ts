@@ -65,4 +65,7 @@ export class StringService {
     INTERNAL_USER_ERR: "Internal server error fetching users.",
     USER_EXIST: "User already exists",
   };
+  readonly endpoint = {
+    QUERY_ERROR: "Failed to query for all endpoints.",
+  };
 }

@@ -1,10 +1,14 @@
 import { PrismaService } from "src/prisma/prisma.service";
 import { EndPointDto } from "./dtos/endpoint.dto";
 import { Injectable } from "@nestjs/common";
+import { StringService } from "src/util/util.service";
 
 @Injectable()
 export class EndpointService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly stringService: StringService,
+  ) {}
 
   async updateEndpointCounter(endpointDto: EndPointDto) {
     try {
@@ -24,6 +28,16 @@ export class EndpointService {
       return;
     } catch (error) {
       throw error;
+    }
+  }
+
+  async getEndpointsInfo() {
+    try {
+      const endpoints = await this.prismaService.endpoint.findMany();
+      return endpoints;
+    } catch (error) {
+      console.error(this.stringService.endpoint.QUERY_ERROR, error);
+      throw new Error(this.stringService.endpoint.QUERY_ERROR);
     }
   }
 }
