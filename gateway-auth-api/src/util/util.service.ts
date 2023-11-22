@@ -58,6 +58,7 @@ export class StringService {
     PRISMA_ERROR_CODE: "P2025", // Record to delete does not exist, chatgpt lookup of error code handle
     INVALID_STORYID: "Invalid story ID given.",
     STORY_FOUND: "successful retrieval of user's story",
+    AXIOS_ERROR: "Received an invalid response from ML server",
   };
   readonly user = {
     LOG_EMAIL: (email: string) => `Searching for user with email: ${email}`,

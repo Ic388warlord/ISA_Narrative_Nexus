@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
+  BadGatewayException,
 } from "@nestjs/common";
 import axios from "axios";
 import { StoryDto } from "./dtos/story.dto";
@@ -25,7 +26,7 @@ export class StoryService {
       return response.data;
     } catch (error) {
       console.log(error);
-      throw error;
+      throw new BadGatewayException(this.stringService.story.AXIOS_ERROR);
     }
   }
 
