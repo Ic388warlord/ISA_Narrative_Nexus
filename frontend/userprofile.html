@@ -18,15 +18,22 @@
         margin: 0;
         padding: 0;
         background-color: #f4f4f4;
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        grid-template-rows: repeat(12, 1fr);
       }
 
       header {
+        grid-column-start: 1;
+        grid-column-end: 13;
+
         background-color: #333;
         padding: 20px;
         text-align: center;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        border: 1px solid #000;
       }
 
       header img {
@@ -47,31 +54,14 @@
       }
 
       .main-content {
+        grid-column-start: 4;
+        grid-column-end: 13;
+        grid-row-start: 2;
+        grid-row-end: 5;
+
         text-align: center;
         padding: 50px;
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-      }
-
-      table,
-      th,
-      td {
-        border: 1px solid #ddd;
-      }
-
-      th,
-      td {
-        padding: 15px;
-        text-align: left;
-      }
-
-      th {
-        background-color: #333;
-        color: #fff;
+        border: 1px solid #000;
       }
 
       /* Added style for the back button */
@@ -86,12 +76,26 @@
 
       /* Style for the user stories slider */
       #userStoriesSlider {
-        margin-top: 20px;
+        grid-column-start: 1;
+        grid-column-end: 4;
+        grid-row-start: 2;
+        grid-row-end: 12;
+        overflow-y: auto;
+        height: 100vh;
+        border: 1px solid #000;
       }
 
       #userStoriesSlider p {
         margin: 0;
         padding: 10px;
+        border: 1px solid #ddd;
+      }
+
+      #userStoriesDetail {
+        grid-column-start: 4;
+        grid-column-end: 13;
+        grid-row-start: 5;
+        grid-row-end: 13;
         border: 1px solid #ddd;
       }
     </style>
@@ -107,25 +111,13 @@
       <div id="userInfoDiv">
         <!-- User information will be displayed here -->
       </div>
-      <div id="adminData" style="display: none">
-        <h2>User Data</h2>
-        <table id="userTable">
-          <tr>
-            <th>ID</th>
-            <th>Email</th>
-            <th>Hash</th>
-            <th>Role</th>
-            <th>Firstname</th>
-            <th>Username</th>
-          </tr>
-        </table>
-      </div>
-
-      <!-- User stories slider container -->
-      <div id="userStoriesSlider">
-        <!-- User stories will be displayed here -->
-      </div>
     </div>
+
+    <div id="userStoriesSlider">
+      <!-- User stories will be displayed here -->
+    </div>
+
+    <div id="userStoriesDetail"></div>
 
     <script>
       const endPointRoot = "https://jdefazmxvy.us18.qoddiapp.com";
@@ -186,19 +178,23 @@
         // Append the userDiv to userInfoDiv
         userInfoDiv.appendChild(userDiv);
 
-        // Fetch and display user stories
-        // const userStories = await getUserStories();
         const userStoriesSlider = document.getElementById("userStoriesSlider");
-        // console.log(userStories);
-
-        // Create a div to hold user stories
         const storiesDiv = document.createElement("div");
-
-        console.log(stories);
 
         // // Populate user stories
         stories.forEach((story) => {
-          storiesDiv.innerHTML += `<p>${story.story}</p>`;
+          const storyElement = document.createElement("p");
+          storyElement.innerHTML = `<span class="story" data-id="${story.id}">${story.title}</span>`;
+          storiesDiv.appendChild(storyElement);
+
+          // Add click event listener to each story element
+          storyElement.addEventListener("click", async () => {
+            const storyId = story.id;
+            console.log("Clicked on story with ID:", storyId);
+            const storyObject = await getStoriesID(storyId);
+
+            populateUserStoriesDetail(storyObject.storyinfo);
+          });
         });
 
         // // // Append the storiesDiv to userStoriesSlider
@@ -211,6 +207,43 @@
           autoplay: true,
           autoplaySpeed: 2000,
         });
+      }
+
+      function getStoriesID(id) {
+        return fetch(endPointRoot + `/api/v1/story/getUserStory/${id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        })
+          .then((response) => response.json())
+          .then((jsonData) => jsonData)
+          .catch((error) => {
+            return response.json();
+          });
+      }
+
+      function populateUserStoriesDetail(storyObject) {
+        const userStoriesDetailDiv =
+          document.getElementById("userStoriesDetail");
+
+        // Create a div to hold story details
+        const storyDetailDiv = document.createElement("div");
+
+        // Populate story details
+        storyDetailDiv.innerHTML = `
+          <h2>${storyObject.title}</h2>
+          <p><strong>Time:</strong> ${storyObject.updatedat}</p>
+          <p><strong>Genre:</strong> ${storyObject.genre}</p>
+          <p>${storyObject.story}</p>
+        `;
+
+        // Clear the userStoriesDetailDiv before appending the new details
+        userStoriesDetailDiv.innerHTML = "";
+
+        // Append the storyDetailDiv to userStoriesDetailDiv
+        userStoriesDetailDiv.appendChild(storyDetailDiv);
       }
 
       function checkUserInfo() {
