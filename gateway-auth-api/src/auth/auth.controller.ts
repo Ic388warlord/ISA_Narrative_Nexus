@@ -19,6 +19,7 @@ import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { StringService } from "src/util/util.service";
 import { EndpointService } from "src/endpoint/endpoint.service";
 import { HttpMethod } from "@prisma/client";
+import { UserService } from "src/user/user.service";
 
 @ApiTags("Authentication")
 @Controller({
@@ -30,6 +31,7 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly stringService: StringService,
     private readonly endpointService: EndpointService,
+    private readonly userService: UserService,
   ) {}
 
   @ApiOperation({
@@ -49,8 +51,6 @@ export class AuthController {
     @Body() loginDto: LoginDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    console.log(req.path);
-    console.log(req.method);
     const token = await this.authService.login(
       loginDto.username,
       loginDto.password,
@@ -59,6 +59,10 @@ export class AuthController {
     this.endpointService.updateEndpointCounter({
       method: HttpMethod[req.method],
       name: req.path,
+    });
+
+    this.userService.updateRequestCounter({
+      username: loginDto.username,
     });
 
     res.cookie("token", token, {
@@ -74,9 +78,14 @@ export class AuthController {
   @Get("logout")
   async logout(@Req() req: Request) {
     await this.authService.logout(req.cookies.token);
+
     this.endpointService.updateEndpointCounter({
       method: HttpMethod[req.method],
       name: req.path,
+    });
+
+    this.userService.updateRequestCounter({
+      username: req["user"].username,
     });
 
     return { message: this.stringService.auth.LOGOUT_OK };
@@ -88,6 +97,11 @@ export class AuthController {
       method: HttpMethod[req.method],
       name: req.path,
     });
+
+    this.userService.updateRequestCounter({
+      username: req["user"].username,
+    });
+
     return this.authService.me(req["user"]);
   }
 
@@ -96,8 +110,9 @@ export class AuthController {
   forgotPassword(@Req() req: Request, @Param("email") email: string) {
     this.endpointService.updateEndpointCounter({
       method: HttpMethod[req.method],
-      name: req.path,
+      name: this.stringService.endpoint.FORGOT_PASSWORD_PATH,
     });
+
     return this.authService.forgotPassword(email);
   }
 
@@ -109,6 +124,11 @@ export class AuthController {
       method: HttpMethod[req.method],
       name: req.path,
     });
+
+    this.userService.updateRequestCounter({
+      username: req["user"].username,
+    });
+
     return this.authService.verifyResetToken(token);
   }
 
@@ -123,6 +143,10 @@ export class AuthController {
     this.endpointService.updateEndpointCounter({
       method: HttpMethod[req.method],
       name: req.path,
+    });
+
+    this.userService.updateRequestCounter({
+      username: req["user"].username,
     });
 
     console.log(token);

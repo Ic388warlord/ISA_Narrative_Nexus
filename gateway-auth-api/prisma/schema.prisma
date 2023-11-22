@@ -8,14 +8,14 @@ datasource db {
 }
 
 model User {
-  id               Int                @id @default(autoincrement())
-  email            String             @unique @default("")
-  hash             String             @default("")
-  role             Role               @default(USER)
-  firstname        String             @default("")
-  username         String             @unique @default("")
+  id               Int               @id @default(autoincrement())
+  email            String            @unique @default("")
+  hash             String            @default("")
+  role             Role              @default(USER)
+  firstname        String            @default("")
+  username         String            @unique @default("")
   stories          Story[]
-  userrequestcount UserRequestCount[]
+  userrequestcount UserRequestCount?
 }
 
 model Story {
@@ -31,7 +31,7 @@ model Story {
 model UserRequestCount {
   id       Int    @id @default(autoincrement())
   count    Int
-  username String
+  username String @unique
   user     User   @relation(fields: [username], references: [username])
 }
 

@@ -64,8 +64,17 @@ export class StringService {
     LOG_EMAIL: (email: string) => `Searching for user with email: ${email}`,
     INTERNAL_USER_ERR: "Internal server error fetching users.",
     USER_EXIST: "User already exists",
+    UPSERT_ERROR:
+      "Upsert operation failed to either create item or update the count of endpoint.",
+    USER_DOES_NOT_EXIST: "User does not exist.",
   };
   readonly endpoint = {
     QUERY_ERROR: "Failed to query for all endpoints.",
+    UPSERT_ERROR:
+      "Upsert operation failed to either create item or update the count of endpoint.",
+    GET_USER_STORIES_PATH: "/api/story/getUserStories",
+    GET_USER_STORY_PATH: "/api/story/getUserStory",
+    FORGOT_PASSWORD_PATH: "/api/auth/forgotpassword",
+    USER_TOTAL_REQUEST_PATH: "/api/user/usertotalrequest",
   };
 }

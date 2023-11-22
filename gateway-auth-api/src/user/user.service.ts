@@ -2,11 +2,13 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { genSaltSync, hashSync } from "bcrypt";
 import { PrismaService } from "src/prisma/prisma.service";
 import { RegisterDto } from "./dtos/register.dto";
+import { RequestCountDto } from "./dtos/requestCount.dto";
 import { StringService } from "src/util/util.service";
 
 @Injectable()
@@ -76,6 +78,48 @@ export class UserService {
       throw new InternalServerErrorException(
         this.stringService.user.INTERNAL_USER_ERR,
       );
+    }
+  }
+
+  async updateRequestCounter(requestCountDto: RequestCountDto) {
+    try {
+      await this.prismaService.userRequestCount.upsert({
+        where: { username: requestCountDto.username },
+        create: {
+          username: requestCountDto.username,
+          count: 1,
+        },
+        update: {
+          count: {
+            increment: 1,
+          },
+        },
+      });
+      return;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        this.stringService.user.UPSERT_ERROR,
+      );
+    }
+  }
+
+  async userTotalRequest(username: string) {
+    try {
+      const userTotalRequest =
+        await this.prismaService.userRequestCount.findUnique({
+          where: {
+            username: username,
+          },
+        });
+
+      if (!userTotalRequest) {
+        throw new NotFoundException(
+          this.stringService.user.USER_DOES_NOT_EXIST,
+        );
+      }
+      return userTotalRequest;
+    } catch (error) {
+      throw error;
     }
   }
 }

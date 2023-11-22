@@ -18,6 +18,7 @@ import { EditStoryDto } from "./dtos/editstory.dto";
 import { DeleteStoryDto } from "./dtos/deleteStory.dto";
 import { EndpointService } from "src/endpoint/endpoint.service";
 import { HttpMethod } from "@prisma/client";
+import { UserService } from "src/user/user.service";
 
 @ApiTags("story")
 @Controller({
@@ -28,9 +29,10 @@ export class StoryController {
   // Dependency injection, give me an instance
   // private only accessible within the class
   constructor(
-    private storyService: StoryService,
+    private readonly storyService: StoryService,
     private readonly stringService: StringService,
     private readonly endpointService: EndpointService,
+    private readonly userService: UserService,
   ) {}
 
   @Post("generatestory")
@@ -43,6 +45,10 @@ export class StoryController {
     this.endpointService.updateEndpointCounter({
       method: HttpMethod[req.method],
       name: req.path,
+    });
+
+    this.userService.updateRequestCounter({
+      username: req["user"].username,
     });
 
     return this.storyService.generateStory(storyDto);
@@ -60,6 +66,10 @@ export class StoryController {
       name: req.path,
     });
 
+    this.userService.updateRequestCounter({
+      username: req["user"].username,
+    });
+
     return this.storyService.saveStory(savestoryDto);
   }
 
@@ -70,7 +80,11 @@ export class StoryController {
   ) {
     this.endpointService.updateEndpointCounter({
       method: HttpMethod[req.method],
-      name: req.path,
+      name: this.stringService.endpoint.GET_USER_STORIES_PATH,
+    });
+
+    this.userService.updateRequestCounter({
+      username: req["user"].username,
     });
 
     return this.storyService.getUserStories(username);
@@ -80,7 +94,11 @@ export class StoryController {
   async getUserStory(@Req() req: Request, @Param("storyid") storyid: number) {
     this.endpointService.updateEndpointCounter({
       method: HttpMethod[req.method],
-      name: req.path,
+      name: this.stringService.endpoint.GET_USER_STORY_PATH,
+    });
+
+    this.userService.updateRequestCounter({
+      username: req["user"].username,
     });
 
     return this.storyService.getUserStory(+storyid);
@@ -98,6 +116,10 @@ export class StoryController {
       name: req.path,
     });
 
+    this.userService.updateRequestCounter({
+      username: req["user"].username,
+    });
+
     return this.storyService.editStory(editStoryDto);
   }
 
@@ -109,6 +131,10 @@ export class StoryController {
     this.endpointService.updateEndpointCounter({
       method: HttpMethod[req.method],
       name: req.path,
+    });
+
+    this.userService.updateRequestCounter({
+      username: req["user"].username,
     });
 
     console.log(this.stringService.story.LOG_DATA, deleteStoryDto);

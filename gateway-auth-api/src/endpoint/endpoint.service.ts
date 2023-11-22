@@ -27,7 +27,7 @@ export class EndpointService {
       });
       return;
     } catch (error) {
-      throw error;
+      throw new Error(this.stringService.endpoint.UPSERT_ERROR);
     }
   }
 

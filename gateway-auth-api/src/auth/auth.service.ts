@@ -55,6 +55,12 @@ export class AuthService {
     if (!userEmail)
       throw new NotFoundException(this.stringService.auth.EMAIL_DOES_NOT_EXIST);
 
+    console.log(userEmail);
+
+    this.userService.updateRequestCounter({
+      username: userEmail.username,
+    });
+
     const token = this.jwtService.sign(userEmail, {
       secret: this.configService.get("JWT_SECRET"),
       expiresIn: "20m",

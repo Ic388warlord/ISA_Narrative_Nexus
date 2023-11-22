@@ -5,6 +5,7 @@ import { EndpointService } from "./endpoint.service";
 import { StringService } from "src/util/util.service";
 import { HttpMethod } from "@prisma/client";
 import { Request } from "express";
+import { UserService } from "src/user/user.service";
 
 @ApiTags("Endpoint")
 @Controller({
@@ -13,8 +14,9 @@ import { Request } from "express";
 })
 export class EndpointController {
   constructor(
-    private endpointService: EndpointService,
+    private readonly endpointService: EndpointService,
     private readonly stringService: StringService,
+    private readonly userService: UserService,
   ) {}
 
   async updateEndpointCounter(@Body() endpointDto: EndPointDto): Promise<any> {
@@ -27,6 +29,10 @@ export class EndpointController {
     this.endpointService.updateEndpointCounter({
       method: HttpMethod[req.method],
       name: req.path,
+    });
+
+    this.userService.updateRequestCounter({
+      username: req["user"].username,
     });
 
     return this.endpointService.getEndpointsInfo();
