@@ -67,6 +67,8 @@ export class StringService {
     UPSERT_ERROR:
       "Upsert operation failed to either create item or update the count of endpoint.",
     USER_DOES_NOT_EXIST: "User does not exist.",
+    ALL_USER_REQUEST_COUNT_ERROR:
+      "Query did not return with all user count results.",
   };
   readonly endpoint = {
     QUERY_ERROR: "Failed to query for all endpoints.",

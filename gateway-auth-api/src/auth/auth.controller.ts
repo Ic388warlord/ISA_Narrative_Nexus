@@ -61,10 +61,6 @@ export class AuthController {
       name: req.path,
     });
 
-    this.userService.updateRequestCounter({
-      username: loginDto.username,
-    });
-
     res.cookie("token", token, {
       path: "/api",
       httpOnly: true,
@@ -124,11 +120,6 @@ export class AuthController {
       method: HttpMethod[req.method],
       name: req.path,
     });
-
-    this.userService.updateRequestCounter({
-      username: req["user"].username,
-    });
-
     return this.authService.verifyResetToken(token);
   }
 
@@ -143,10 +134,6 @@ export class AuthController {
     this.endpointService.updateEndpointCounter({
       method: HttpMethod[req.method],
       name: req.path,
-    });
-
-    this.userService.updateRequestCounter({
-      username: req["user"].username,
     });
 
     console.log(token);

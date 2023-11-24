@@ -57,10 +57,6 @@ export class AuthService {
 
     console.log(userEmail);
 
-    this.userService.updateRequestCounter({
-      username: userEmail.username,
-    });
-
     const token = this.jwtService.sign(userEmail, {
       secret: this.configService.get("JWT_SECRET"),
       expiresIn: "20m",

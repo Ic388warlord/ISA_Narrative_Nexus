@@ -31,10 +31,6 @@ export class UserController {
       name: req.path,
     });
 
-    this.userService.updateRequestCounter({
-      username: registerDto.username,
-    });
-
     return this.userService.createUser(registerDto);
   }
 
@@ -73,5 +69,19 @@ export class UserController {
     });
 
     return this.userService.userTotalRequest(username);
+  }
+
+  @Get("allusertotalrequest")
+  async allUserTotalRequest(@Req() req: Request): Promise<any> {
+    this.endpointService.updateEndpointCounter({
+      method: HttpMethod[req.method],
+      name: req.path,
+    });
+
+    this.userService.updateRequestCounter({
+      username: req["user"].username,
+    });
+
+    return this.userService.allUserTotalRequest();
   }
 }

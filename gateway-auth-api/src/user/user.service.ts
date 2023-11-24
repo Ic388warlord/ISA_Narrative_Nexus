@@ -122,4 +122,20 @@ export class UserService {
       throw error;
     }
   }
+
+  async allUserTotalRequest() {
+    try {
+      const alluserTotalRequest =
+        await this.prismaService.userRequestCount.findMany();
+
+      if (!alluserTotalRequest) {
+        throw new InternalServerErrorException(
+          this.stringService.user.ALL_USER_REQUEST_COUNT_ERROR,
+        );
+      }
+      return alluserTotalRequest;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
