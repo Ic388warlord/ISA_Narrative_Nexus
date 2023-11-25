@@ -16,13 +16,10 @@ ROUTE_GENERATE_STORY = '/generateStory'
 def systemContentScenario(paragraph):
     return f'''Generate three potential one-sentence scenarios with the following structure:
     {{"scenario1": "", "scenario2": "", "scenario3": ""}}.
-    
-    Paragraph:
-    "{paragraph}"
     '''
 
 def systemContentParagraph():
-    return f"Fix the grammar and punctuation in the following text: "
+    return f"Fix grammar, punctuation and complete the sentence in the following text: "
 
 def gptCompletionMsg(paragraph, system_content):
     return [
