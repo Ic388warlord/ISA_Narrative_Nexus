@@ -1,0 +1,61 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;  
+    background-image: url("../assets/img/narrative_nexus.jpg");
+    background-size: cover;
+    background-position: center;
+  }
+  
+  form {
+    max-width: 300px;
+    margin: 20px auto;
+  }
+
+  #welcome {
+    font-size: 24px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #fffbfb;
+    margin-bottom: 20px;
+  }
+
+  #signup {
+    color: #fffbfb;
+  }
+
+  #signup_button {
+    color: rgb(53, 159, 194);
+  }
+
+  #feedback {
+    color: white;
+  }
+
+  #div_login_container {
+    text-align: center;
+  }
+
+  input {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0 20px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+
+  button {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
