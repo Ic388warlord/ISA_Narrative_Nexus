@@ -154,4 +154,16 @@ export class UserService {
       );
     }
   }
+
+  async overUsage(username: string) {
+    const user = await this.prismaService.userRequestCount.findUnique({
+      where: { username: username },
+    });
+    if (!user) {
+      throw new BadRequestException(
+        this.stringService.user.USER_DOES_NOT_EXIST,
+      );
+    }
+    return { overUsage: user.count > 20 };
+  }
 }

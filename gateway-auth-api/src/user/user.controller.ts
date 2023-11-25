@@ -99,4 +99,18 @@ export class UserController {
 
     return this.userService.changeRole(changeRoleDto);
   }
+
+  @Get("overusage")
+  overUsage(@Req() req: Request) {
+    this.endpointService.updateEndpointCounter({
+      method: HttpMethod[req.method],
+      name: req.path,
+    });
+
+    this.userService.updateRequestCounter({
+      username: req["user"].username,
+    });
+
+    return this.userService.overUsage(req["user"].username);
+  }
 }
