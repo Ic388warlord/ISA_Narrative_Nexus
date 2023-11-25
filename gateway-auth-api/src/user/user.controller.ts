@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Req, Param } from "@nestjs/common";
+import { Body, Controller, Get, Post, Req, Param, Patch } from "@nestjs/common";
 import { Request } from "express";
 import { UserService } from "./user.service";
 import { RegisterDto } from "./dtos/register.dto";
@@ -8,6 +8,7 @@ import { EndpointService } from "src/endpoint/endpoint.service";
 import { HttpMethod } from "@prisma/client";
 import { RequestCountDto } from "./dtos/requestCount.dto";
 import { StringService } from "src/util/util.service";
+import { ChangeRoleDto } from "./dtos/changerole.dto";
 
 @ApiTags("User")
 @Controller({
@@ -83,5 +84,19 @@ export class UserController {
     });
 
     return this.userService.allUserTotalRequest();
+  }
+
+  @Patch("changerole")
+  changeRole(@Req() req: Request, @Body() changeRoleDto: ChangeRoleDto) {
+    this.endpointService.updateEndpointCounter({
+      method: HttpMethod[req.method],
+      name: req.path,
+    });
+
+    this.userService.updateRequestCounter({
+      username: req["user"].username,
+    });
+
+    return this.userService.changeRole(changeRoleDto);
   }
 }

@@ -10,6 +10,8 @@ import { PrismaService } from "src/prisma/prisma.service";
 import { RegisterDto } from "./dtos/register.dto";
 import { RequestCountDto } from "./dtos/requestCount.dto";
 import { StringService } from "src/util/util.service";
+import { ChangeRoleDto } from "./dtos/changerole.dto";
+import { Role } from "@prisma/client";
 
 @Injectable()
 export class UserService {
@@ -136,6 +138,20 @@ export class UserService {
       return alluserTotalRequest;
     } catch (error) {
       throw error;
+    }
+  }
+
+  async changeRole(changeRoleDto: ChangeRoleDto) {
+    try {
+      const updated = await this.prismaService.user.update({
+        where: { username: changeRoleDto.username },
+        data: { role: Role[changeRoleDto.role] },
+      });
+      return;
+    } catch (err) {
+      throw new BadRequestException(
+        this.stringService.user.USER_DOES_NOT_EXIST,
+      );
     }
   }
 }
