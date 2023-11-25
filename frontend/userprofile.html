@@ -152,15 +152,18 @@
     <script>
       const endPointRoot = "https://jdefazmxvy.us18.qoddiapp.com";
       let currentStoryObject;
+      let currentUser;
 
       checkUserInfo()
         .then(async (info) => {
+          currentUser = info;
           if (info.statusCode == 401) {
             window.location.href = "index.html";
           }
-          let currentUserInfo = info;
+
+          const userCount = await getUserCount(info);
           const stories = await getUserStories(info);
-          showInfo(info, stories.stories);
+          showInfo(info, stories.stories, userCount);
         })
         .catch((error) => console.error("Error checking user role:", error));
 
@@ -192,7 +195,7 @@
       }
 
       // Update the showInfo function to include user stories
-      async function showInfo(info, stories) {
+      async function showInfo(info, stories, userCount) {
         const userInfoDiv = document.getElementById("userInfoDiv");
 
         // Create a div to hold user information
@@ -203,6 +206,7 @@
             <h2>User Information</h2>
             <p><strong>Email:</strong> ${info.email}</p>
             <p><strong>Username:</strong> ${info.username}</p>
+            <p><strong>API Count:</strong> ${userCount.count}</p>
         `;
 
         // Append the userDiv to userInfoDiv
@@ -369,6 +373,20 @@
           .then((jsonData) => jsonData)
           .catch((error) => {
             console.error("Error checking user role:", error);
+            return jsonData;
+          });
+      }
+
+      function getUserCount(info) {
+        return fetch(endPointRoot + `/api/v1/user/usertotalrequest/${info.username}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        })
+          .then((response) => response.json())
+          .then((jsonData) => {
             return jsonData;
           });
       }

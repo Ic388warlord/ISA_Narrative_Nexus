@@ -173,7 +173,7 @@
       let userData = "";
 
       getUsersInfo()
-        .then((data) => {
+        .then(async (data) => {
 
 
           if (data.statusCode == 401) {
@@ -185,7 +185,9 @@
           if (data.role === "ADMIN") {
             document.getElementById("main-content-admin").style.display =
               "inline-block";
-            showUserData();
+            const usersCount = await getUsersCount();
+            showUserData(usersCount);
+            
           } else {
             document.getElementById("main-content-user").style.display =
               "inline-block";
@@ -260,18 +262,7 @@
               if (this.status === 201) {
                 const jsonData = JSON.parse(this.response);
                 console.log("Return data: ", jsonData);
-                //   let sentenceGenerated = jsonData[0].generated_text;
-                //   if (!sentenceGenerated.endsWith(".")) {
-                //     sentenceGenerated += ".";
-                //   }
-                // generatedTextElement.innerHTML = jsonData[0].generated_text;
-                // Display scenarios with buttons
-                // const scenarios = jsonData[1];
-                // scenariosElement.innerHTML = `
-                //   <button onclick="combineAndLog('${scenarios.scenario1}')">'${scenarios.scenario1}'</button>
-                //   <button onclick="combineAndLog('${scenarios.scenario2}')">'${scenarios.scenario2}'</button>
-                //   <button onclick="combineAndLog('${scenarios.scenario3}')">'${scenarios.scenario3}'</button>
-                // `;
+
                 const updated_story = jsonData[0].generated_text;
                 const scenarios = jsonData[1];
 
@@ -396,7 +387,28 @@
         };
       }
 
-      function showUserData() {
+      function getUsersCount() {
+        const endPoint = "/api/v1/user/allusertotalrequest";
+
+        return fetch(endPointRoot + endPoint, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        })
+          .then((response) => response.json())
+          .then((jsonData) => {
+            // console.log(jsonData)
+
+            return jsonData;
+          });
+
+      }
+
+      function showUserData(usersCount) {
+
+        console.log(usersCount);
         const table = document.getElementById("userTable");
 
         const endPoint = "/api/v1/user/getallusers";
@@ -411,16 +423,20 @@
           .then((response) => response.json())
           .then((jsonData) => {
             table.innerHTML =
-              "<tr><th>ID</th><th>Email</th><th>Hash</th><th>Role</th><th>Firstname</th><th>Username</th></tr>";
+              "<tr><th>ID</th><th>Email</th><th>Firstname</th><th>Username</th><th>Role</th><th>API Count</th></tr>";
 
             jsonData.data.forEach((user) => {
               const row = table.insertRow();
               row.insertCell(0).innerText = user.id;
               row.insertCell(1).innerText = user.email;
-              row.insertCell(2).innerText = user.hash;
-              row.insertCell(3).innerText = user.role;
-              row.insertCell(4).innerText = user.firstname;
-              row.insertCell(5).innerText = user.username;
+              row.insertCell(2).innerText = user.firstname;
+              row.insertCell(3).innerText = user.username;
+              row.insertCell(4).innerText = user.role;
+
+              const matchingUserCount = usersCount.find(
+                (countData) => countData.username === user.username
+              )
+              row.insertCell(5).innerText = matchingUserCount ? matchingUserCount.count : 0;
             });
           })
           .catch((error) => console.error("Error fetching user data:", error));
