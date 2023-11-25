@@ -25,4 +25,4 @@ export const ID_INDEX_LOGINBUTTON = "loginButton";
 // FEEDBACK
 // index.html
 export const INVALID_LOGIN_ATTEMPT = "Invalid entry, either invalid password or nonexistent username.";
-export const INVALID_LOGIN_INPUT = "Please enter and username and password."
+export const INVALID_LOGIN_INPUT = "Please enter a username and password."
