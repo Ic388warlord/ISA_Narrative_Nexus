@@ -73,15 +73,28 @@
         /* word-wrap: break-word; */
       }
 
-      table {
+      #usertable {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 40px auto;
+        margin: auto;
       }
 
       #endpointTable {
-        vertical-align: middle; /* Add this line to center vertically */
+        width: 100%;
+        border-collapse: collapse;
+        margin: auto;
       }
+
+      #button_info {
+        position: fixed;
+        top: 100px; /* Adjust the top position as needed */
+        right: 20px; /* Adjust the right position as needed */
+        z-index: 1; /* Ensure it's above other elements */
+      }
+/* 
+      #endpointTable {
+        margin-top: 200px;
+      } */
 
       th,
       td {
