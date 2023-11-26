@@ -1,4 +1,7 @@
-const endPointRoot = "https://jdefazmxvy.us18.qoddiapp.com";
+import * as commonStrings from "./common_strings.js";
+
+const endPointRoot = commonStrings.SERVER_URL;
+const endPoint = commonStrings.ENDPOINT_REGISTER;
 
 function register() {
   const username = document.getElementById("regUsername").value;
@@ -7,7 +10,6 @@ function register() {
   const firstName = document.getElementById("regFirstName").value;
 
   const xhttp = new XMLHttpRequest();
-  const endPoint = "/api/v1/user/register";
 
   const data = {
     username: username,
@@ -16,8 +18,8 @@ function register() {
     firstname: firstName,
   };
 
-  xhttp.open("POST", endPointRoot + endPoint, true);
-  xhttp.setRequestHeader("Content-Type", "application/json");
+  xhttp.open(commonStrings.POST, endPointRoot + endPoint, true);
+  xhttp.setRequestHeader(commonStrings.CONTENT_TYPE, commonStrings.APPLICATION_JSON);
   xhttp.withCredentials = true;
   xhttp.send(JSON.stringify(data));
 
@@ -28,11 +30,11 @@ function register() {
         console.log(jsonData);
 
         // Display success message
-        document.getElementById("successMessage").innerText = "Registration successful.";
+        document.getElementById("successMessage").innerText = commonStrings.REGISTRATION_SUCCESS;
 
         // Redirect to login page after 3 seconds
         setTimeout(function () {
-          window.location.href = "index.html";
+          window.location.href = commonStrings.INDEX_HTML;
         }, 3000);
       } else {
         const jsonData = JSON.parse(this.response);

@@ -1,6 +1,7 @@
 // ENDPOINTS
 export const SERVER_URL = "https://jdefazmxvy.us18.qoddiapp.com";
 export const ENDPOINT_LOGIN = "/api/v1/auth/login";
+export const ENDPOINT_REGISTER = "/api/v1/user/register";
 
 // METHODS
 export const POST = "POST";
@@ -26,3 +27,6 @@ export const ID_INDEX_LOGINBUTTON = "loginButton";
 // index.html
 export const INVALID_LOGIN_ATTEMPT = "Invalid entry, either invalid password or nonexistent username.";
 export const INVALID_LOGIN_INPUT = "Please enter a username and password."
+
+//Registration Message
+export const REGISTRATION_SUCCESS = "Registration successful.";
