@@ -19,8 +19,6 @@ function submitForm() {
     try {
       if (this.readyState === 4) {
 
-        const jsonData = JSON.parse(this.response)
-  
         if (this.status === 200) {
           successMessage.innerHTML = commonStrings.PASSWORD_SUCCESS;
           const submit = (document.getElementById("submit_button").style.display =
@@ -28,7 +26,7 @@ function submitForm() {
           back.style.display = "inline-block";
   
         } else {
-          successMessage.innerHTML = jsonData.message;
+          successMessage.innerHTML = commonStrings.PASSWORD_FAIL;
           back.style.display = "inline-block";
         }
       }
