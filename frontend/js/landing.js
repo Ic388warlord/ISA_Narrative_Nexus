@@ -1,35 +1,43 @@
-const endPointRoot = "https://jdefazmxvy.us18.qoddiapp.com";
-let savedStory = "";
+import * as commonStrings from "./common_strings.js";
+
+const endPointRoot = commonStrings.SERVER_URL;
 
 let userData = "";
 
-getUsersInfo()
-  .then(async (data) => {
-    if (data.statusCode == 401) {
-      window.location.href = "index.html";
-    }
+document.addEventListener("DOMContentLoaded", function () {
+  getUsersInfo()
+    .then(async (data) => {
+      if (data.statusCode == 401) {
+        window.location.href = commonStrings.INDEX_HTML;
+      }
 
-    userData = data;
+      userData = data;
 
-    if (data.role === "ADMIN") {
-      document.getElementById("main-content-admin").style.display =
-        "inline-block";
-      const usersCount = await getUsersCount();
-      showUserData(usersCount);
-      showEndpointData();
-    } else {
-      document.getElementById("main-content-user").style.display =
-        "inline-block";
-    }
-  })
-  .catch((error) => console.error("Error checking user role:", error));
+      if (data.role === commonStrings.ADMIN) {
+        document.getElementById("main-content-admin").style.display = commonStrings.INLINE_BLOCK;
+        const usersCount = await getUsersCount();
+        showUserData(usersCount);
+        showEndpointData();
+      } else {
+        document.getElementById("main-content-user").style.display = commonStrings.INLINE_BLOCK;
+      }
+    })
+    .catch((error) => console.error(commonStrings.ERROR_ROLE, error));
+
+  // Add event listeners
+  document.getElementById("logoutButton").addEventListener("click", logout);
+  document.getElementById("button_generate_story").addEventListener("click", generateStory);
+  document.getElementById("button_save_story").addEventListener("click", saveStory);
+  document.getElementById("button_info").addEventListener("click", toggleAdminInfo);
+});
+
 
 function logout() {
   const xhttp = new XMLHttpRequest();
-  const stringEndPoint = "/api/v1/auth/logout";
+  const endPoint = commonStrings.ENDPOINT_LOGOUT;
 
-  xhttp.open("GET", endPointRoot + stringEndPoint, true);
-  xhttp.setRequestHeader("Content-Type", "application/json");
+  xhttp.open(commonStrings.GET, endPointRoot + endPoint, true);
+  xhttp.setRequestHeader(commonStrings.CONTENT_TYPE, commonStrings.APPLICATION_JSON);
   xhttp.withCredentials = true;
   xhttp.send();
 
@@ -40,7 +48,7 @@ function logout() {
         console.log(jsonData);
 
         // Redirect to landing.html after successful logout
-        window.location.href = "index.html";
+        window.location.href = commonStrings.INDEX_HTML;
       }
     }
   };
@@ -49,10 +57,11 @@ function logout() {
 async function generateStory() {
   const feedback = document.getElementById("feedback");
   const overusage = await checkOverusage();
+  const endPoint = commonStrings.ENDPOINT_GENERATE_STORIES;
 
   if (overusage == true) {
     feedback.innerHTML =
-      "You have maxed out your usage. lease me caution with your usage.";
+      commonStrings.MESSAGE_MAX_OUT;
   }
 
   const TEXTAREA_STORY = document.getElementById("textarea_story");
@@ -67,10 +76,7 @@ async function generateStory() {
   const INPUT_TITLE_TEXT = document.getElementById("input_title_text");
 
   const xhttp = new XMLHttpRequest();
-  const endPoint = "/api/v1/story/generateStory";
-  // references to the story and genre
-  // const TEXTAREA_STORY = document.getElementById("textarea_story");
-  // const SELECT_GENRE = document.getElementById("select_genre");
+
   const DIV_RADIO_BUTTONS = document.getElementById("radio_button_scenarios");
   const DIV_GENERATING = document.getElementById("div_generating");
 
@@ -83,13 +89,13 @@ async function generateStory() {
   // Disable button to prevent spamming
   BUTTON_GENERATE_STORY.disabled = true;
   // Show api call indicator;
-  DIV_GENERATING.style.display = "block";
+  DIV_GENERATING.style.display = commonStrings.BLOCK;
 
   // User has not given any input
   if (current_story.length < 1) {
-    alert("Enter some input.");
+    alert(commonStrings.MESSAGE_ENTER_INPUT);
     BUTTON_GENERATE_STORY.disabled = false;
-    DIV_GENERATING.style.display = "none";
+    DIV_GENERATING.style.display = commonStrings.NONE;
   } else {
     // Set the data for the post request
     const data = {
@@ -97,18 +103,17 @@ async function generateStory() {
       genre: current_genre,
     };
 
-    xhttp.open("POST", endPointRoot + endPoint, true);
-    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.open(commonStrings.POST, endPointRoot + endPoint, true);
+    xhttp.setRequestHeader(commonStrings.CONTENT_TYPE, commonStrings.APPLICATION_JSON);
     xhttp.withCredentials = true;
 
-    console.log("Data: ", data);
     xhttp.send(JSON.stringify(data));
 
     xhttp.onreadystatechange = function () {
       if (this.readyState === 4) {
         if (this.status === 201) {
           const jsonData = JSON.parse(this.response);
-          console.log("Return data: ", jsonData);
+          console.log(commonStrings.MESSAGE_RETURN_DATA, jsonData);
 
           const updated_story = jsonData[0].generated_text;
           const scenarios = jsonData[1];
@@ -117,8 +122,8 @@ async function generateStory() {
           TEXTAREA_STORY.value = updated_story;
 
           // Clear the generated scenarios.
-          scenariosElement.innerHTML = "";
-          DIV_RADIO_BUTTONS.innerHTML = "";
+          scenariosElement.innerHTML = commonStrings.EMPTY_STRING;
+          DIV_RADIO_BUTTONS.innerHTML = commonStrings.EMPTY_STRING;
           // Display all scenarios
           Object.keys(scenarios).forEach((scenarioKey) => {
             scenariosElement.innerText += `${scenarioKey}: ${scenarios[scenarioKey]}\n`;
@@ -127,10 +132,10 @@ async function generateStory() {
           createScenarioRadioButtons(scenarios, updated_story, TEXTAREA_STORY);
 
           BUTTON_GENERATE_STORY.disabled = false;
-          DIV_GENERATING.style.display = "none";
+          DIV_GENERATING.style.display = commonStrings.NONE;
         } else {
           BUTTON_GENERATE_STORY.disabled = false;
-          DIV_GENERATING.style.display = "none";
+          DIV_GENERATING.style.display = commonStrings.NONE;
         }
       }
     };
@@ -171,24 +176,25 @@ function createScenarioRadioButtons(
 }
 
 function getUsersInfo() {
-  return fetch(endPointRoot + "/api/v1/auth/me", {
-    method: "GET",
+
+  const endPoint = commonStrings.ENDPOINT_AUTH
+  return fetch(endPointRoot + endPoint, {
+    method: commonStrings.GET,
     headers: {
-      "Content-Type": "application/json",
+      [commonStrings.CONTENT_TYPE]: [commonStrings.APPLICATION_JSON],
     },
-    credentials: "include",
+    credentials: commonStrings.INCLUDE,
   })
     .then((response) => response.json())
     .then((jsonData) => jsonData)
     .catch((error) => {
-      console.error("Error checking user role:", error);
+      console.error(commonStrings.ERROR_ROLE, error);
       return jsonData;
     });
 }
 
 function saveStory() {
-  // const feedback = document.getElementById("feedback")
-  // const generatedText = document.getElementById("generatedText").innerText;
+
   const TEXTAREA_STORY = document.getElementById("textarea_story");
   const SELECT_GENRE = document.getElementById("select_genre");
   const INPUT_TITLE = document.getElementById("input_title");
@@ -198,9 +204,9 @@ function saveStory() {
   const savedTitle = INPUT_TITLE.value;
 
   const xhttp = new XMLHttpRequest();
-  const endPoint = "/api/v1/story/savestory";
-  xhttp.open("POST", endPointRoot + endPoint, true);
-  xhttp.setRequestHeader("Content-Type", "application/json");
+  const endPoint = commonStrings.ENDPOINT_SAVE_STORIES;
+  xhttp.open(commonStrings.POST, endPointRoot + endPoint, true);
+  xhttp.setRequestHeader(commonStrings.CONTENT_TYPE, commonStrings.APPLICATION_JSON);
   xhttp.withCredentials = true;
 
   const savedData = {
@@ -229,14 +235,15 @@ function saveStory() {
 }
 
 function getUsersCount() {
-  const endPoint = "/api/v1/user/allusertotalrequest";
+
+  const endPoint = commonStrings.ENDPOINT_ALL_USER_TOTAL_REQUEST;
 
   return fetch(endPointRoot + endPoint, {
-    method: "GET",
+    method: commonStrings.GET,
     headers: {
-      "Content-Type": "application/json",
+      [commonStrings.CONTENT_TYPE]: [commonStrings.APPLICATION_JSON],
     },
-    credentials: "include",
+    credentials: commonStrings.INCLUDE,
   })
     .then((response) => response.json())
     .then((jsonData) => {
@@ -251,29 +258,29 @@ function toggleAdminInfo() {
   const endpointTable = document.getElementById("endpointTable");
   const button = document.getElementById("button_info");
 
-  if (endpointTable.style.display == "none") {
-    userTable.style.display = "none";
-    endpointTable.style.display = "inline-block";
-    button.textContent = "Endpoint's Information";
+  if (endpointTable.style.display == commonStrings.NONE) {
+    userTable.style.display = commonStrings.NONE;
+    endpointTable.style.display = commonStrings.INLINE_BLOCK;
+    button.textContent = commonStrings.EP_INFO;
   } else {
-    userTable.style.display = "inline-block";
-    endpointTable.style.display = "none";
-    button.textContent = "User's Information";
+    userTable.style.display = commonStrings.INLINE_BLOCK;
+    endpointTable.style.display = commonStrings.NONE;
+    button.textContent = commonStrings.USER_INFO;
   }
 }
 
 function showEndpointData() {
-  // const userTable = document.getElementById("userTable");
+
+  const endPoint = commonStrings.ENDPOINT_INFO
+
   const table = document.getElementById("endpointTable");
 
-  // userTable.style.display = "none";
-  // table.style.display = "inline-block"
-  fetch(endPointRoot + "/api/v1/endpoint/info", {
-    method: "GET",
+  fetch(endPointRoot + endPoint, {
+    method: commonStrings.GET,
     headers: {
-      "Content-Type": "application/json",
+      [commonStrings.CONTENT_TYPE]: [commonStrings.APPLICATION_JSON],
     },
-    credentials: "include",
+    credentials: commonStrings.INCLUDE,
   })
     .then((response) => response.json())
     .then((jsonData) => {
@@ -288,7 +295,7 @@ function showEndpointData() {
         row.insertCell(3).innerText = info.count;
       });
     })
-    .catch((error) => console.error("Error fetching endpoint data:", error));
+    .catch((error) => console.error(commonStrings.ERROR_ENDPOINT, error));
 }
 
 // Function to handle role selection
@@ -302,10 +309,10 @@ function handleRoleSelection(userName, currentRole) {
 
   console.log(dataRole);
 
-  const endPoint = "/api/v1/user/changerole";
+  const endPoint = commonStrings.ENDPOINT_CHANGE_ROLE;
 
-  xhttp.open("PATCH", endPointRoot + endPoint, true);
-  xhttp.setRequestHeader("Content-Type", "application/json");
+  xhttp.open(commonStrings.PATCH, endPointRoot + endPoint, true);
+  xhttp.setRequestHeader(commonStrings.CONTENT_TYPE, commonStrings.APPLICATION_JSON);
   xhttp.withCredentials = true;
 
   xhttp.send(JSON.stringify(dataRole));
@@ -313,7 +320,7 @@ function handleRoleSelection(userName, currentRole) {
   xhttp.onreadystatechange = function () {
     if (this.readyState === 4) {
       if (this.status === 200) {
-        console.log("Updated!");
+        
       }
     }
   };
@@ -328,14 +335,14 @@ function updateRoleInTable(userId, newRole) {
 }
 
 function checkOverusage() {
-  const endPoint = "/api/v1/user/overusage";
+  const endPoint = commonStrings.ENDPOINT_OVERUSAGE;
 
   return fetch(endPointRoot + endPoint, {
-    method: "GET",
+    method: commonStrings.GET,
     headers: {
-      "Content-Type": "application/json",
+      [commonStrings.CONTENT_TYPE]: [commonStrings.APPLICATION_JSON],
     },
-    credentials: "include",
+    credentials: commonStrings.INCLUDE,
   })
     .then((response) => response.json())
     .then((jsonData) => {
@@ -346,14 +353,14 @@ function checkOverusage() {
 function showUserData(usersCount) {
   const table = document.getElementById("userTable");
 
-  const endPoint = "/api/v1/user/getallusers";
+  const endPoint = commonStrings.ENDPOINT_GET_USERS_DATA;
 
   fetch(endPointRoot + endPoint, {
-    method: "GET",
+    method: commonStrings.GET,
     headers: {
-      "Content-Type": "application/json",
+      [commonStrings.CONTENT_TYPE]: [commonStrings.APPLICATION_JSON],
     },
-    credentials: "include",
+    credentials: commonStrings.INCLUDE,
   })
     .then((response) => response.json())
     .then((jsonData) => {
@@ -372,7 +379,7 @@ function showUserData(usersCount) {
         const roleSelect = document.createElement("select");
         roleSelect.id = `role-${user.username}`;
 
-        const options = ["USER", "ADMIN"];
+        const options = [commonStrings.USER, commonStrings.ADMIN];
         options.forEach((option) => {
           const optionElement = document.createElement("option");
           optionElement.value = option;
@@ -410,5 +417,5 @@ function showUserData(usersCount) {
           : 0;
       });
     })
-    .catch((error) => console.error("Error fetching user data:", error));
+    .catch((error) => console.error(commonStrings.ERROR_USER_DATA, error));
 }

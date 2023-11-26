@@ -15,7 +15,7 @@
     <header>
       <div class="user-actions">
         <a href="userprofile.html">User Profile</a>
-        <a onclick="logout()">Logout</a>
+        <a id="logoutButton">Logout</a>
       </div>
     </header>
 
@@ -48,10 +48,10 @@
         <textarea id="textarea_story" cols="100" rows="15"></textarea>
 
         <br />
-        <button id="button_generate_story" onclick="generateStory()">
+        <button id="button_generate_story">
           Generate Story
         </button>
-        <button id="button_save_story" onclick="saveStory()">Save Story</button>
+        <button id="button_save_story">Save Story</button>
         <br />
         <br />
 
@@ -70,7 +70,7 @@
       </div>
 
       <div class="main-content" id="main-content-admin" style="display: none">
-        <button onclick="toggleAdminInfo()" id="button_info">
+        <button id="button_info">
           User's Information
         </button>
         <br />
@@ -94,6 +94,6 @@
         </table>
       </div>
     </div>
-    <script src="./js/landing.js"></script>
+    <script type="module" src="./js/landing.js"></script>
   </body>
 </html>
