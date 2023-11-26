@@ -286,6 +286,7 @@
         userStoriesDetailDiv.appendChild(storyDetailDiv);
       }
 
+
       function deleteStory() {
 
         const deleteData = {
@@ -326,6 +327,23 @@
 
         // Replace the existing story text with the textarea
         storyTextElement.replaceWith(textareaElement);
+
+        cancelButton.onclick = function () {
+          // Replace the textarea with the original story text
+          textareaElement.replaceWith(storyTextElement);
+
+          // Reset the button texts and display
+          editButton.textContent = "Edit";
+          cancelButton.style.display = "none";
+          deleteButton.style.display = "inline-block";
+
+          // Set the onclick event for the edit button back to editStory
+          editButton.onclick = editStory;
+        };
+
+
+
+
         editButton.onclick = saveStory;
       }
 
