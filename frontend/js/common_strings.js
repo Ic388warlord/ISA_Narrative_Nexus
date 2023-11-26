@@ -32,5 +32,8 @@ export const ID_INDEX_LOGINBUTTON = "loginButton";
 export const INVALID_LOGIN_ATTEMPT = "Invalid entry, either invalid password or nonexistent username.";
 export const INVALID_LOGIN_INPUT = "Please enter a username and password."
 
-//Registration Message
+// REGISTRATION
 export const REGISTRATION_SUCCESS = "Registration successful.";
+
+// PASSWORD
+export const PASSWORD_SUCCESS = "Email to reset password have been sent!";
