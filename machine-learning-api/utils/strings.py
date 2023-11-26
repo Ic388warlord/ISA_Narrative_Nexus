@@ -13,17 +13,15 @@ ENDPOINT = '/api/v1'
 ROUTE_GENERATE_STORY = '/generateStory'
 
 
-def systemContentScenario(paragraph):
-    return f'''Generate three potential one-sentence scenarios with the following structure:
-    {{"scenario1": "", "scenario2": "", "scenario3": ""}}.
-    '''
+def systemContentScenario():
+    return f'''You are a scenario generator. Generate three potential one-sentence scenarios with the following valid JSON structure: {{"scenario1": "", "scenario2": "", "scenario3": ""}}.'''
 
 def systemContentParagraph():
-    return f"Fix grammar, punctuation and complete the sentence in the following text: "
+    return f"You are a proof-reader. Do not change the given text too much.:"
 
 def gptCompletionMsg(paragraph, system_content):
     return [
-            {"role": "system", "content" :system_content},
+            {"role": "system", "content": system_content},
             {"role": "user", "content": paragraph}
         ]
 
