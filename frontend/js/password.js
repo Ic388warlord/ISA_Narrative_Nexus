@@ -15,19 +15,28 @@ function submitForm() {
   xhttp.send();
 
   xhttp.onreadystatechange = function () {
-    if (this.readyState === 4) {
 
-      if (this.status === 200) {
-        successMessage.innerHTML = commonStrings.PASSWORD_SUCCESS;
-        const submit = (document.getElementById("submit_button").style.display =
-          "none");
-        back.style.display = "inline-block";
+    try {
+      if (this.readyState === 4) {
 
-      } else {
-        successMessage.innerHTML = commonStrings.PASSWORD_FAIL;
-        back.style.display = "inline-block";
+        const jsonData = JSON.parse(this.response)
+  
+        if (this.status === 200) {
+          successMessage.innerHTML = commonStrings.PASSWORD_SUCCESS;
+          const submit = (document.getElementById("submit_button").style.display =
+            "none");
+          back.style.display = "inline-block";
+  
+        } else {
+          successMessage.innerHTML = jsonData.message;
+          back.style.display = "inline-block";
+        }
       }
+    } catch (error) {
+      console.log(error)
     }
+
+
   };
 }
 
