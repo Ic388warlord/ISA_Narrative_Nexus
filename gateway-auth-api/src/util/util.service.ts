@@ -51,7 +51,7 @@ export class StringService {
     LOG_DATA: "Data value: ",
     LOG_STORY: "Created story:",
     USER_NOT_FOUND: "User does not exist",
-    URL: "https://jdefazmxvy.us18.qoddiapp.com/api/v1/generateStory",
+    URL: "https://jdefazmxvy.us18.qoddiapp.com/api/v1/story/generateStory",
     STORY_NOT_FOUND: "Story is not found for the user.",
     UPDATED_STORY_MSG: "Story has been updated.",
     DELETED_STORY_MSG: "Story has been deleted",
