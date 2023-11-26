@@ -23,7 +23,7 @@ function submitForm() {
         const back = (document.getElementById("back_button").style.display =
           "inline-block");
       } else {
-        console.error("Request failed");
+        successMessage.innerHTML = commonStrings.PASSWORD_FAIL;
       }
     }
   };

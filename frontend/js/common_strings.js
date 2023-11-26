@@ -37,3 +37,4 @@ export const REGISTRATION_SUCCESS = "Registration successful.";
 
 // PASSWORD
 export const PASSWORD_SUCCESS = "Email to reset password have been sent!";
+export const PASSWORD_FAIL = "Email address is not found!";
