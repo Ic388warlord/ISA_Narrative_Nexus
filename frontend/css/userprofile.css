@@ -1,0 +1,114 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(12, 1fr);
+  }
+
+  header {
+    grid-column-start: 1;
+    grid-column-end: 13;
+
+    background-color: #333;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  header img {
+    width: 200px; /* Adjust the size of the logo as needed */
+  }
+
+  .user-actions {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+
+  .user-actions a {
+    text-decoration: none;
+    color: #fff;
+    margin-left: 20px;
+    font-weight: bold;
+  }
+
+  .main-content {
+    grid-column-start: 4;
+    grid-column-end: 13;
+    grid-row-start: 2;
+    grid-row-end: 5;
+
+    text-align: center;
+    padding: 50px;
+  }
+
+  /* Added style for the back button */
+  header button {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  /* Style for the user stories slider */
+  #userStoriesSlider {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 2;
+    grid-row-end: 12;
+    overflow-y: auto;
+    height: 100vh;
+    border: 1px solid #000;
+  }
+
+  #userStoriesSlider p {
+    margin: 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+  }
+
+  #userStoriesDetail {
+    grid-column-start: 4;
+    grid-column-end: 13;
+    grid-row-start: 5;
+    grid-row-end: 13;
+    border: 1px solid #ddd;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100%;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(12, 1fr);
+    border: 1px solid rgb(160, 36, 36);
+  }
+
+  .edited-story {
+    width: 95%;
+    height: 200px; /* Adjust the height accordingly */
+    resize: vertical;
+    padding: 8px;
+  }
+
+  /* #edit-button {
+    grid-column-start: 4;
+    grid-column-end: 6;
+  } */
+
+  /* button {
+    align-self: flex-end; 
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px; 
+  } */
