@@ -1,6 +1,6 @@
 import os
 import json
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
 from dotenv import load_dotenv
 from transformers import pipeline
 from openai import OpenAI
@@ -48,25 +48,28 @@ def generate():
             if sentence is None or genre is None:
                 return jsonify({KEY_ERROR: MSG_INVALID_PAYLOAD}), 400
 
-            gpt_2 = story_gen(storyGenArg(genre, sentence), min_new_tokens=25)
+            gpt_2 = story_gen(storyGenArg(genre, sentence), max_new_tokens=30, min_length=20)
 
             gpt_2[0][KEY_GENERATED_TEXT] = cleanGeneratedMsg(
                 gpt_2[0][KEY_GENERATED_TEXT]
             )
 
             initial_paragraph = gpt_2[0][KEY_GENERATED_TEXT]
-            revised_paragraph = generateOptionFromChatGpt(initial_paragraph, systemContentParagraph())
-            scenarios = json.loads(generateOptionFromChatGpt(revised_paragraph, systemContentScenario(revised_paragraph)))
-
-            gpt_2[0][KEY_GENERATED_TEXT] = revised_paragraph
+            scenarios = json.loads(generateOptionFromChatGpt(initial_paragraph, systemContentScenario()))
             gpt_2.append(scenarios)
             return jsonify(gpt_2)
         else:
             return jsonify({KEY_ERROR: MSG_INVALID_METHOD_CONTENT}), 400
+    except json.JSONDecodeError as err:
+        return jsonify(gpt_2)
     except Exception as err:
         return jsonify({KEY_ERROR: str(err)}), 500
 
+@app.route('/<path:undefined_route>')
+def catch_all(undefined_route):
+    abort(404)
 
 if __name__ == "__main__":
     from waitress import serve
     serve(app, host="0.0.0.0", port=8000)
+    
