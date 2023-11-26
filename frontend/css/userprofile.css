@@ -87,7 +87,7 @@ body {
     min-height: 100%;
     grid-template-columns: repeat(12, 1fr);
     grid-template-rows: repeat(12, 1fr);
-    border: 1px solid rgb(160, 36, 36);
+
   }
 
   .edited-story {
@@ -96,19 +96,3 @@ body {
     resize: vertical;
     padding: 8px;
   }
-
-  /* #edit-button {
-    grid-column-start: 4;
-    grid-column-end: 6;
-  } */
-
-  /* button {
-    align-self: flex-end; 
-    background-color: #4caf50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px; 
-  } */
