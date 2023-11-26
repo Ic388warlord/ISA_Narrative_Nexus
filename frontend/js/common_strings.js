@@ -2,6 +2,7 @@
 export const SERVER_URL = "https://jdefazmxvy.us18.qoddiapp.com";
 export const ENDPOINT_LOGIN = "/api/v1/auth/login";
 export const ENDPOINT_REGISTER = "/api/v1/user/register";
+export const ENDPOINT_FORGET_PASSWORD = "/api/v1/auth/forgotpassword/";
 
 // METHODS
 export const POST = "POST";
@@ -10,6 +11,9 @@ export const GET = "GET";
 // HEADER STRINGS
 export const CONTENT_TYPE = "Content-Type";
 export const APPLICATION_JSON = "application/json";
+
+//HTML Pages
+export const INDEX_HTML = "index.html";
 
 // COMMON STRINGS
 export const EMPTY_STRING = '';

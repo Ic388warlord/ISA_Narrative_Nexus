@@ -1,25 +1,23 @@
-const endPointRoot = "https://jdefazmxvy.us18.qoddiapp.com";
+import * as commonStrings from "./common_strings.js";
+
+const endPointRoot = commonStrings.SERVER_URL;
+const endPoint = commonStrings.ENDPOINT_FORGET_PASSWORD;
 
 function submitForm() {
-  // You can add your logic for handling the form submission here
-  // For this example, we'll just display a success message
   const email = document.getElementById("email").value;
   const successMessage = document.getElementById("successMessage");
   const xhttp = new XMLHttpRequest();
-  const endPoint = "/api/v1/auth/forgotpassword/";
 
-  xhttp.open("GET", endPointRoot + endPoint + email, true);
-  xhttp.setRequestHeader("Content-Type", "text/plain");
+  xhttp.open(commonStrings.GET, endPointRoot + endPoint + email, true);
+  xhttp.setRequestHeader(commonStrings.CONTENT_TYPE, commonStrings.APPLICATION_JSON);
   xhttp.withCredentials = true;
   xhttp.send();
 
   xhttp.onreadystatechange = function () {
     if (this.readyState === 4) {
 
-        console.log(JSON.stringify(this.responseText))
-
       if (this.status === 200) {
-        successMessage.innerHTML = "Email to reset password have been sent!";
+        successMessage.innerHTML = commonStrings.PASSWORD_SUCCESS;
         const submit = (document.getElementById("submit_button").style.display =
           "none");
         const back = (document.getElementById("back_button").style.display =
