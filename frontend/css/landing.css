@@ -1,0 +1,147 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+header {
+  background-color: #333;
+  padding: 40px;
+  text-align: center;
+}
+
+header img {
+  width: 200px;
+  /* Adjust the size of the logo as needed */
+}
+
+.user-actions {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.user-actions a {
+  text-decoration: none;
+  color: #000; /* Set black font color */
+  margin-left: 20px;
+  font-weight: bold;
+  transition: color 0.3s; /* Add smooth color transition on hover */
+  display: inline-block;
+  padding: 10px 15px;
+  background-color: #fff; /* Set white background color */
+  border-radius: 5px; /* Add rounded corners */
+}
+
+.user-actions a:hover {
+  color: #ff5733; /* Change color on hover (you can adjust the color as needed) */
+}
+
+.main-content {
+  text-align: center;
+  padding: 50px;
+}
+
+.content-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* This ensures the container takes up the full height of the viewport */
+}
+
+#scenarios {
+  text-align: left;
+  margin-top: 30px;
+}
+
+#generatedText {
+  overflow: auto;
+  /* or overflow: visible; */
+  /* word-wrap: break-word; */
+}
+
+#usertable {
+  width: 100%;
+  /* border-collapse: collapse; */
+  /* margin: auto; */
+}
+
+#endpointTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin: auto;
+}
+
+#button_info {
+  position: fixed;
+  top: 130px; /* Adjust the top position as needed */
+  right: 20px; /* Adjust the right position as needed */
+  z-index: 1; /* Ensure it's above other elements */
+}
+
+th,
+td {
+  padding: 15px;
+  text-align: left;
+}
+
+th {
+  background-color: #333;
+  color: #fff;
+}
+
+@media only screen and (max-width: 700px) {
+  header {
+    padding: 10px;
+  }
+
+  header img {
+    width: 120px;
+  }
+
+  .user-actions {
+    position: relative;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .user-actions a {
+    display: block;
+    margin: 10px 0;
+  }
+
+  .main-content {
+    text-align: center;
+    padding: 10px;
+  }
+
+  .content-container {
+    min-height: 80vh;
+  }
+
+  #scenarios {
+    margin-top: 10px;
+  }
+
+  #generatedText {
+    overflow: auto;
+  }
+
+  #usertable,
+  #endpointTable {
+    width: 100%;
+    margin: auto;
+  }
+
+  th,
+  td {
+    padding: 8px;
+  }
+  #usertable th:nth-child(1),
+  #usertable td:nth-child(1),
+  #endpointTable th:nth-child(1),
+  #endpointTable td:nth-child(1) {
+    display: none; /* Hide the ID column */
+  }
+}
