@@ -33,8 +33,9 @@ function submitForm() {
       }
     };
   } catch (error) {
+    successMessage.innerHTML = error.message
     // Handle the error here, e.g., log it or display an error message
-    console.error("Error during XMLHttpRequest:", error);
+    // console.error("Error during XMLHttpRequest:", error);
   }
 }
 
