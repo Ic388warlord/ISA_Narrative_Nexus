@@ -87,7 +87,6 @@ body {
     min-height: 100%;
     grid-template-columns: repeat(12, 1fr);
     grid-template-rows: repeat(12, 1fr);
-
   }
 
   .edited-story {
@@ -96,3 +95,51 @@ body {
     resize: vertical;
     padding: 8px;
   }
+
+  @media (max-width: 700px) {
+    form {
+        width: 90%; /* Adjust the width for smaller screens */
+    }
+
+    body {
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+      height: 30vh;
+    }
+
+    header {
+      grid-column-start: 1;
+      grid-column-end: 13;
+      grid-row-start: 0;
+      grid-row-end: 1;
+    }
+
+    .main-content {
+      grid-column-start: 5;
+      grid-column-end: 13;
+      grid-row-start: 1;
+      grid-row-end: 2;
+
+    }
+
+    #userStoriesSlider {
+      grid-column-start: 1;
+      grid-column-end: 4;
+      grid-row-start: 1;
+      grid-row-end: 2;
+      height: 40vh;
+    }
+
+    #userStoriesDetail {
+      grid-column-start: 1;
+      grid-column-end: 13;
+      grid-row-start: 2;
+      grid-row-end: 5;
+
+      justify-content: space-between;
+
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: repeat(12, 1fr);
+    }
+  }
+  
