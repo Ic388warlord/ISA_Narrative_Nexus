@@ -303,8 +303,6 @@ function handleRoleSelection(userName, currentRole) {
     role: currentRole,
   };
 
-  console.log(dataRole);
-
   const endPoint = commonStrings.ENDPOINT_CHANGE_ROLE;
 
   xhttp.open(commonStrings.PATCH, endPointRoot + endPoint, true);
@@ -316,7 +314,7 @@ function handleRoleSelection(userName, currentRole) {
   xhttp.onreadystatechange = function () {
     if (this.readyState === 4) {
       if (this.status === 200) {
-        
+        alert(JSON.parse(xhttp.responseText).message);
       }
     }
   };
