@@ -143,11 +143,11 @@ export class AuthController {
   @ApiOperation({ 
     summary: "Sends password reset email if given email is valid" 
   })
-  @ApiResponse({
+  @ApiOkResponse({
     status: 200,
     description: "Successful, email has been sent to user's email"
   })
-  @ApiResponse({
+  @ApiBadRequestResponse({
     status: 404,
     description: "Unsuccessful, email does not exist",
     type: loginForgotPass
@@ -170,11 +170,11 @@ export class AuthController {
   @ApiOperation({
     summary: "Verifies token from password reset url"
   })
-  @ApiResponse({
+  @ApiOkResponse({
     status: 200,
     description: "Successful, token is valid and password can be reset"
   })
-  @ApiResponse({
+  @ApiUnauthorizedResponse({
     status: 401,
     description: "Unsuccessful, token is invalid",
     type: loginGetSendToResetPage
@@ -195,12 +195,9 @@ export class AuthController {
   @ApiOperation({
     summary: "Updates user password in database"
   })
-  @ApiResponse({
+  @ApiOkResponse({
     status: 200,
     description: "Successful, password for user is updated in database"
-  })
-  @ApiResponse({
-    
   })
   resetPassword(
     @Req() req: Request,
