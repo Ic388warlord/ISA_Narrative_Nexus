@@ -116,7 +116,7 @@ async function generateStory() {
           console.log(commonStrings.MESSAGE_RETURN_DATA, jsonData);
 
           const updated_story = jsonData[0].generated_text;
-          const scenarios = jsonData[1];
+          // const scenarios = jsonData[1];
 
           // Set text area with updated story
           TEXTAREA_STORY.value = updated_story;
@@ -125,11 +125,11 @@ async function generateStory() {
           scenariosElement.innerHTML = commonStrings.EMPTY_STRING;
           DIV_RADIO_BUTTONS.innerHTML = commonStrings.EMPTY_STRING;
           // Display all scenarios
-          Object.keys(scenarios).forEach((scenarioKey) => {
-            scenariosElement.innerText += `${scenarioKey}: ${scenarios[scenarioKey]}\n`;
-          });
+          // Object.keys(scenarios).forEach((scenarioKey) => {
+          //   scenariosElement.innerText += `${scenarioKey}: ${scenarios[scenarioKey]}\n`;
+          // });
 
-          createScenarioRadioButtons(scenarios, updated_story, TEXTAREA_STORY);
+          // createScenarioRadioButtons(scenarios, updated_story, TEXTAREA_STORY);
 
           BUTTON_GENERATE_STORY.disabled = false;
           DIV_GENERATING.style.display = commonStrings.NONE;
