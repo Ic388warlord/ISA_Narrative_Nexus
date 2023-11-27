@@ -155,10 +155,10 @@ th {
   td {
     padding: 8px;
   }
-  #userTable th:nth-child(1),
+  /* #userTable th:nth-child(1),
   #userTable td:nth-child(1),
   #userTable th:nth-child(3),
-  #userTable td:nth-child(3),
+  #userTable td:nth-child(3), */
   #endpointTable th:nth-child(1),
   #endpointTable td:nth-child(1) {
     display: none; /* Hide the ID column */
