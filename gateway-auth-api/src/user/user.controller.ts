@@ -17,6 +17,8 @@ import { UserTotalRequestDto } from "./dtos/userTotalRequest.dto";
 import { UserTotalRequestErrorDto } from "./dtos/userTotalRequestError.dto";
 import { AllUserRequestDto } from "./dtos/allUserRequest.dto";
 import { ChangeRoleDto, ChangeRoleOkResponseDto } from "./dtos/changerole.dto";
+import { OverusageDto } from "./dtos/overusage.dto";
+import { OverusageErrorDto } from "./dtos/overusageError.dto";
 
 @ApiTags("User")
 @Controller({
@@ -133,9 +135,6 @@ export class UserController {
     type: ChangeRoleOkResponseDto,
   })
   @Patch("changerole")
-  @ApiCreatedResponse({
-    description: "Successfully change the role of a user",
-  })
   @ApiBadRequestResponse({
     description: "Failed to change role of a user",
   })
@@ -153,6 +152,14 @@ export class UserController {
   }
 
   @Get("overusage")
+  @ApiCreatedResponse({
+    description: "Successfuly return user's count",
+    type: OverusageDto,
+  })
+  @ApiBadRequestResponse({
+    description: "Invalid endpoint",
+    type: OverusageErrorDto,
+  })
   overUsage(@Req() req: Request) {
     this.endpointService.updateEndpointCounter({
       method: HttpMethod[req.method],
