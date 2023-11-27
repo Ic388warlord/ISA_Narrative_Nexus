@@ -9,6 +9,8 @@ header {
   background-color: #333;
   padding: 40px;
   text-align: center;
+  display: flex;
+  justify-content: end;
 }
 
 header img {
@@ -16,16 +18,9 @@ header img {
   /* Adjust the size of the logo as needed */
 }
 
-.user-actions {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-}
-
 .user-actions a {
   text-decoration: none;
   color: #000; /* Set black font color */
-  margin-left: 20px;
   font-weight: bold;
   transition: color 0.3s; /* Add smooth color transition on hover */
   display: inline-block;
@@ -48,6 +43,10 @@ header img {
   justify-content: center;
   align-items: center;
   height: 100vh; /* This ensures the container takes up the full height of the viewport */
+}
+
+#textarea_story {
+  width: 99%;
 }
 
 #scenarios {
@@ -110,8 +109,13 @@ th {
   }
 
   .user-actions {
+    width: 100%;
     position: relative;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
     /* margin-top: 10px; */
   }
 
