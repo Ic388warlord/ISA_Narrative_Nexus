@@ -10,12 +10,21 @@ import {
   Render,
   Req,
   Res,
+  UnauthorizedException,
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { Public } from "./auth.metadata";
-import { LoginDto } from "./dtos/login.dto";
+import { LoginDto, LoginOkResponseDto } from "./dtos/login.dto";
 import { Request, Response } from "express";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBadRequestResponse,
+  ApiCookieAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from "@nestjs/swagger";
 import { StringService } from "src/util/util.service";
 import { EndpointService } from "src/endpoint/endpoint.service";
 import { HttpMethod } from "@prisma/client";
@@ -33,16 +42,17 @@ export class AuthController {
     private readonly endpointService: EndpointService,
     private readonly userService: UserService,
   ) {}
-
   @ApiOperation({
-    summary:
-      "Login in user with email, username, and password. Creates a cookie on client side when successful",
+    summary: "Login",
   })
-  @ApiResponse({
-    status: 200,
-    description: "Successful login, creates a cookie on client side",
+  @ApiOkResponse({
+    description: "Login was successful",
+    type: LoginOkResponseDto,
   })
-  @ApiResponse({ status: 403, description: "Invalid login credentials" })
+  @ApiUnauthorizedResponse({
+    description: "Invalid login credententials or user not found",
+    type: Object,
+  })
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post("login")
@@ -55,7 +65,6 @@ export class AuthController {
       loginDto.username,
       loginDto.password,
     );
-
     this.endpointService.updateEndpointCounter({
       method: HttpMethod[req.method],
       name: req.path,
@@ -71,6 +80,12 @@ export class AuthController {
     return { message: this.stringService.auth.LOGIN_OK };
   }
 
+  @ApiCookieAuth()
+  @ApiOperation({
+    summary: "Logout",
+  })
+  @ApiOkResponse({ description: "Sucessful signout" })
+  @ApiUnauthorizedResponse({ description: "JWT was not valid" })
   @Get("logout")
   async logout(@Req() req: Request) {
     await this.authService.logout(req.cookies.token);
@@ -87,6 +102,9 @@ export class AuthController {
     return { message: this.stringService.auth.LOGOUT_OK };
   }
 
+  @ApiCookieAuth()
+  @ApiOperation({ summary: "Get logged in user's info" })
+  @ApiOkResponse({ description: "Their user info" })
   @Get("me")
   me(@Req() req: Request) {
     this.endpointService.updateEndpointCounter({
@@ -101,6 +119,9 @@ export class AuthController {
     return this.authService.me(req["user"]);
   }
 
+  @ApiOperation({ summary: "Send email for forget password" })
+  @ApiOkResponse({ description: "Sucessfully sent the email" })
+  @ApiBadRequestResponse({ description: "User does not exist" })
   @Public()
   @Get("forgotpassword/:email")
   forgotPassword(@Req() req: Request, @Param("email") email: string) {
@@ -112,6 +133,9 @@ export class AuthController {
     return this.authService.forgotPassword(email);
   }
 
+  @ApiOperation({ summary: "Go to reset password page" })
+  @ApiOkResponse({ description: "On the page" })
+  @ApiUnauthorizedResponse({ description: "Reset token expired" })
   @Public()
   @Get("reset")
   @Render("index")
@@ -123,6 +147,8 @@ export class AuthController {
     return this.authService.verifyResetToken(token);
   }
 
+  @ApiOperation({ summary: "Resets the user's password" })
+  @ApiOkResponse({ description: "Password was reset" })
   @Public()
   @Post("reset")
   @Render("index")
