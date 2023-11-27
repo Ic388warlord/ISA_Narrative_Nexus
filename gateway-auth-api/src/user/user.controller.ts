@@ -3,12 +3,12 @@ import { Request } from "express";
 import { UserService } from "./user.service";
 import { RegisterDto } from "./dtos/register.dto";
 import { Public } from "src/auth/auth.metadata";
-import { ApiBadRequestResponse, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBadRequestResponse, ApiCreatedResponse } from "@nestjs/swagger";
+import { ApiOkResponse, ApiTags } from "@nestjs/swagger";
 import { EndpointService } from "src/endpoint/endpoint.service";
 import { HttpMethod } from "@prisma/client";
 import { RequestCountDto } from "./dtos/requestCount.dto";
 import { StringService } from "src/util/util.service";
-import { ChangeRoleDto } from "./dtos/changerole.dto";
 import { RegisterResponseDto } from "./dtos/registerResponse.dto";
 import { RegisterResponseErrorDto } from "./dtos/registerResponseError.dto";
 import { allUserData } from "./dtos/allUserData.dto";
@@ -16,6 +16,7 @@ import { AllUserDataError } from "./dtos/allUserDataError.dto";
 import { UserTotalRequestDto } from "./dtos/userTotalRequest.dto";
 import { UserTotalRequestErrorDto } from "./dtos/userTotalRequestError.dto";
 import { AllUserRequestDto } from "./dtos/allUserRequest.dto";
+import { ChangeRoleDto, ChangeRoleOkResponseDto } from "./dtos/changerole.dto";
 
 @ApiTags("User")
 @Controller({
@@ -127,6 +128,10 @@ export class UserController {
     return this.userService.allUserTotalRequest();
   }
 
+  @ApiOkResponse({
+    description: "Role was changed successfully",
+    type: ChangeRoleOkResponseDto,
+  })
   @Patch("changerole")
   @ApiCreatedResponse({
     description: "Successfully change the role of a user",

@@ -34,9 +34,10 @@ async function bootstrap() {
     .setTitle("Narrative Nexus API")
     .setDescription("API documentation for Narrative Nexus")
     .setVersion("1.0")
+    .addCookieAuth("token")
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup("api", app, document);
+  SwaggerModule.setup("doc", app, document);
 
   const PORT = process.env.PORT || 3000;
   console.log(process.env.NODE_ENV);

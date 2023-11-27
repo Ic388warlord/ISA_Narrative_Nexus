@@ -35,7 +35,8 @@ export class AuthGuard implements CanActivate {
 
     const token = this.extractTokenFromHeaders(request);
 
-    if (!token) throw new UnauthorizedException(this.stringService.auth.INVALID_TOKEN);
+    if (!token)
+      throw new UnauthorizedException(this.stringService.auth.INVALID_TOKEN);
 
     const isBlacklisted = await this.redisService.isBlacklistedToken(token);
     if (isBlacklisted) {

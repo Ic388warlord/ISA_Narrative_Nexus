@@ -15,3 +15,8 @@ export class ChangeRoleDto {
   @IsNotEmpty()
   username: string;
 }
+
+export class ChangeRoleOkResponseDto {
+  @ApiProperty({ default: "Updated role successfully" })
+  message: string;
+}

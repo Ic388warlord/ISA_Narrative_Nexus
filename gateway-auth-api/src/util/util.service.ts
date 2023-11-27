@@ -46,6 +46,7 @@ export class StringService {
   readonly redis = {
     REDIS_CONNECTED: "Connected to Redis Client",
     BLACK_TOKEN_TTL: (ttl: number) => `Blacklist Token TTL in seconds: ${ttl}`,
+    UNABLE_TO_CONNECT: "Unable to connect to Redis",
   };
   readonly story = {
     LOG_DATA: "Data value: ",
@@ -69,6 +70,7 @@ export class StringService {
     USER_DOES_NOT_EXIST: "User does not exist.",
     ALL_USER_REQUEST_COUNT_ERROR:
       "Query did not return with all user count results.",
+    ROLE_UPDATED: "Updated role successfullly",
   };
   readonly endpoint = {
     QUERY_ERROR: "Failed to query for all endpoints.",

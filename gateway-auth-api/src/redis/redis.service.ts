@@ -1,4 +1,8 @@
-import { Injectable, Logger } from "@nestjs/common";
+import {
+  Injectable,
+  Logger,
+  ServiceUnavailableException,
+} from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { createClient } from "redis";
@@ -12,7 +16,7 @@ export class RedisService {
   constructor(
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
-    private readonly stringService: StringService
+    private readonly stringService: StringService,
   ) {
     const redisClient = createClient({
       password: configService.get("REDIS_PASSWORD"),
@@ -24,7 +28,12 @@ export class RedisService {
     this.client = redisClient;
     this.client
       .connect()
-      .then(() => this.logger.log(this.stringService.redis.REDIS_CONNECTED));
+      .then(() => this.logger.log(this.stringService.redis.REDIS_CONNECTED))
+      .catch(() => {
+        throw new ServiceUnavailableException(
+          stringService.redis.UNABLE_TO_CONNECT,
+        );
+      });
   }
 
   async blacklistToken(token: string): Promise<void> {
