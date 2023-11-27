@@ -36,7 +36,6 @@ import { loginForgotPass } from "./dtos/loginForgotPass.dto";
 import { loginGetSendToResetPage } from "./dtos/loginGetSendToResetPage.dto";
 import { LogoutErrorResponseDto, LogoutOkResponseDto } from "./dtos/logout.dto";
 import { MeErrorResponseDto, MeOkResponseDto } from "./dtos/me.dto";
-import { loginPostBodySendToResetPage } from "./dtos/loginPostSEntToResetPage.dto";
 
 @ApiTags("Authentication")
 @Controller({
@@ -203,7 +202,7 @@ export class AuthController {
   resetPassword(
     @Req() req: Request,
     @Query("token") token: string,
-    @Body() body: loginPostBodySendToResetPage,
+    @Body() body,
   ) {
     this.endpointService.updateEndpointCounter({
       method: HttpMethod[req.method],
