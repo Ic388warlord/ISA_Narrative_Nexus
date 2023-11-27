@@ -143,11 +143,11 @@ export class UserService {
 
   async changeRole(changeRoleDto: ChangeRoleDto) {
     try {
-      const updated = await this.prismaService.user.update({
+      await this.prismaService.user.update({
         where: { username: changeRoleDto.username },
         data: { role: Role[changeRoleDto.role] },
       });
-      return;
+      return { message: this.stringService.user.ROLE_UPDATED };
     } catch (err) {
       throw new BadRequestException(
         this.stringService.user.USER_DOES_NOT_EXIST,

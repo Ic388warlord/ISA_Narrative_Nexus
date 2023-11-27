@@ -1,3 +1,4 @@
+import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty } from "class-validator";
 
 export class ChangeRoleDto {
@@ -6,4 +7,9 @@ export class ChangeRoleDto {
 
   @IsNotEmpty()
   username: string;
+}
+
+export class ChangeRoleOkResponseDto {
+  @ApiProperty({ default: "Updated role successfully" })
+  message: string;
 }

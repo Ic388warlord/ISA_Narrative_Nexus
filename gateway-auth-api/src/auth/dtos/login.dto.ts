@@ -28,3 +28,14 @@ export class LoginOkResponseDto {
   @ApiProperty({ default: "Login successful" })
   message: string;
 }
+
+export class LoginErrorResponseDto {
+  @ApiProperty({ default: "User does not exist or invalid credentials" })
+  message: string;
+
+  @ApiProperty({ default: "Unauthorized" })
+  error: string;
+
+  @ApiProperty({ default: 401 })
+  statusCode: number;
+}
