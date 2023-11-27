@@ -22,6 +22,7 @@ import { Request, Response } from "express";
 import {
   ApiBadRequestResponse,
   ApiCookieAuth,
+  ApiResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
@@ -35,6 +36,7 @@ import { loginForgotPass } from "./dtos/loginForgotPass.dto";
 import { loginGetSendToResetPage } from "./dtos/loginGetSendToResetPage.dto";
 import { LogoutErrorResponseDto, LogoutOkResponseDto } from "./dtos/logout.dto";
 import { MeErrorResponseDto, MeOkResponseDto } from "./dtos/me.dto";
+import { loginPostBodySendToResetPage } from "./dtos/loginPostSEntToResetPage.dto";
 
 @ApiTags("Authentication")
 @Controller({
@@ -135,23 +137,20 @@ export class AuthController {
     return this.authService.me(req["user"]);
   }
 
-  @ApiOperation({ summary: "Send email for forget password" })
-  @ApiOkResponse({ description: "Sucessfully sent the email" })
-  @ApiBadRequestResponse({ description: "User does not exist" })
-  @Public()
-  @Get("forgotpassword/:email")
   @ApiOperation({ 
     summary: "Sends password reset email if given email is valid" 
   })
-  @ApiOkResponse({
+  @ApiResponse({
     status: 200,
     description: "Successful, email has been sent to user's email"
   })
-  @ApiBadRequestResponse({
+  @ApiResponse({
     status: 404,
     description: "Unsuccessful, email does not exist",
     type: loginForgotPass
   })
+  @Public()
+  @Get("forgotpassword/:email")
   forgotPassword(@Req() req: Request, @Param("email") email: string) {
     this.endpointService.updateEndpointCounter({
       method: HttpMethod[req.method],
@@ -161,24 +160,24 @@ export class AuthController {
     return this.authService.forgotPassword(email);
   }
 
-  @ApiOperation({ summary: "Go to reset password page" })
-  @ApiOkResponse({ description: "On the page" })
-  @ApiUnauthorizedResponse({ description: "Reset token expired" })
-  @Public()
-  @Get("reset")
-  @Render("index")
   @ApiOperation({
     summary: "Verifies token from password reset url"
   })
-  @ApiOkResponse({
+  @ApiResponse({
     status: 200,
     description: "Successful, token is valid and password can be reset"
   })
-  @ApiUnauthorizedResponse({
+  @ApiResponse({
     status: 401,
     description: "Unsuccessful, token is invalid",
     type: loginGetSendToResetPage
   })
+  @ApiUnauthorizedResponse({ 
+    description: "Reset token expired" 
+  })
+  @Public()
+  @Get("reset")
+  @Render("index")
   sendToResetPage(@Req() req: Request, @Query("token") token: string) {
     this.endpointService.updateEndpointCounter({
       method: HttpMethod[req.method],
@@ -187,22 +186,24 @@ export class AuthController {
     return this.authService.verifyResetToken(token);
   }
 
-  @ApiOperation({ summary: "Resets the user's password" })
-  @ApiOkResponse({ description: "Password was reset" })
-  @Public()
-  @Post("reset")
-  @Render("index")
   @ApiOperation({
-    summary: "Updates user password in database"
+    summary: "Reset user password in database"
   })
-  @ApiOkResponse({
+  @ApiResponse({
     status: 200,
     description: "Successful, password for user is updated in database"
   })
+  @ApiResponse({
+    status: 401,
+    description: "Token expired"
+  })
+  @Public()
+  @Post("reset")
+  @Render("index")
   resetPassword(
     @Req() req: Request,
     @Query("token") token: string,
-    @Body() body,
+    @Body() body: loginPostBodySendToResetPage,
   ) {
     this.endpointService.updateEndpointCounter({
       method: HttpMethod[req.method],
