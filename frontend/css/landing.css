@@ -64,19 +64,18 @@ header img {
 #userTable {
   width: 100%;
   margin-top: 300px;
-  /* border-collapse: collapse; */
-  /* margin: auto; */
+  border-collapse: collapse;
 }
 
 #endpointTable {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 350px;
+  margin-top: 300px;
 }
 
 #button_info {
-  position: fixed;
-  top: 130px; /* Adjust the top position as needed */
+  position: relative;
+  top: 300px; /* Adjust the top position as needed */
   right: 20px; /* Adjust the right position as needed */
   z-index: 1; /* Ensure it's above other elements */
 }
@@ -137,7 +136,7 @@ th {
     overflow: auto;
   }
 
-  #usertable,
+  #userTable,
   #endpointTable {
     width: 100%;
     margin: auto;
