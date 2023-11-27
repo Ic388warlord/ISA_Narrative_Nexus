@@ -61,8 +61,9 @@ header img {
   /* word-wrap: break-word; */
 }
 
-#usertable {
+#userTable {
   width: 100%;
+  margin-top: 300px;
   /* border-collapse: collapse; */
   /* margin: auto; */
 }
@@ -70,7 +71,7 @@ header img {
 #endpointTable {
   width: 100%;
   border-collapse: collapse;
-  margin: auto;
+  margin-top: 350px;
 }
 
 #button_info {
