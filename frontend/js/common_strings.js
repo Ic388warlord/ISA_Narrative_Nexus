@@ -33,6 +33,7 @@ export const INCLUDE = "include";
 
 //HTML Pages
 export const INDEX_HTML = "index.html";
+export const USERPROFILE_HTML = "userprofile.html";
 
 // COMMON STRINGS
 export const EMPTY_STRING = '';

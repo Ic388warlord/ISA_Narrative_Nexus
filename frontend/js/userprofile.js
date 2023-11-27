@@ -142,7 +142,6 @@ function populateUserStoriesDetail(storyObject) {
   editButton.addEventListener("click", editStory);
   deleteButton.addEventListener("click", deleteStory);
 
-
   function deleteStory() {
     const endPoint = commonStrings.ENDPOINT_DELETE_STORIES;
     const deleteData = {
@@ -161,6 +160,9 @@ function populateUserStoriesDetail(storyObject) {
       .then((jsonData) => {
         const userStoriesDetail = document.getElementById("userStoriesDetail");
         userStoriesDetail.innerHTML = jsonData.message;
+        setTimeout(() => {
+          window.location.href = commonStrings.USERPROFILE_HTML;
+        }, 1000); // 1000 milliseconds (1 second)
       });
   }
 
@@ -169,40 +171,38 @@ function populateUserStoriesDetail(storyObject) {
 
     if (storyTextElement) {
       const storyText = storyTextElement.textContent;
-  
+
       const cancelButton = document.getElementById("cancel-button");
       const editButton = document.getElementById("edit-button");
       const deleteButton = document.getElementById("delete-button");
-  
+
       editButton.textContent = "Save";
       cancelButton.style.display = "inline-block";
       deleteButton.style.display = "none";
-  
+
       // Create a textarea element
       const textareaElement = document.createElement("textarea");
       textareaElement.value = storyText;
       textareaElement.classList.add("edited-story");
-  
+
       // Replace the existing story text with the textarea
       storyTextElement.replaceWith(textareaElement);
-  
+
       cancelButton.onclick = function () {
         // Replace the textarea with the original story text
         textareaElement.replaceWith(storyTextElement);
-  
+
         // Reset the button texts and display
         editButton.textContent = "Edit";
         cancelButton.style.display = "none";
         deleteButton.style.display = "inline-block";
-  
+
         // Set the onclick event for the edit button back to editStory
         editButton.onclick = editStory;
       };
-  
+
       editButton.onclick = saveStory;
-
     }
-
   }
 }
 
