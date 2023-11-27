@@ -3,12 +3,19 @@ import { Request } from "express";
 import { UserService } from "./user.service";
 import { RegisterDto } from "./dtos/register.dto";
 import { Public } from "src/auth/auth.metadata";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBadRequestResponse, ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { EndpointService } from "src/endpoint/endpoint.service";
 import { HttpMethod } from "@prisma/client";
 import { RequestCountDto } from "./dtos/requestCount.dto";
 import { StringService } from "src/util/util.service";
 import { ChangeRoleDto } from "./dtos/changerole.dto";
+import { RegisterResponseDto } from "./dtos/registerResponse.dto";
+import { RegisterResponseErrorDto } from "./dtos/registerResponseError.dto";
+import { allUserData } from "./dtos/allUserData.dto";
+import { AllUserDataError } from "./dtos/allUserDataError.dto";
+import { UserTotalRequestDto } from "./dtos/userTotalRequest.dto";
+import { UserTotalRequestErrorDto } from "./dtos/userTotalRequestError.dto";
+import { AllUserRequestDto } from "./dtos/allUserRequest.dto";
 
 @ApiTags("User")
 @Controller({
@@ -24,6 +31,15 @@ export class UserController {
 
   @Public()
   @Post("register")
+  @ApiCreatedResponse({
+    description: "Successfully registered a new user",
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    type: RegisterResponseDto,
+  })
+  @ApiBadRequestResponse({
+    description: "Failed to register a new user",
+    type: RegisterResponseErrorDto,
+  })
   register(@Req() req: Request, @Body() registerDto: RegisterDto) {
     console.log(registerDto);
 
@@ -36,6 +52,14 @@ export class UserController {
   }
 
   @Get("getallusers")
+  @ApiCreatedResponse({
+    description: "Successfuly get a json object that contains all user's data",
+    type: allUserData,
+  })
+  @ApiBadRequestResponse({
+    description: "Failed to get the users data",
+    type: AllUserDataError,
+  })
   async getAllUsers(@Req() req: Request) {
     this.endpointService.updateEndpointCounter({
       method: HttpMethod[req.method],
@@ -56,6 +80,15 @@ export class UserController {
   }
 
   @Get("usertotalrequest/:username")
+  @ApiCreatedResponse({
+    description:
+      "Successfuly get a json object that contains all user total request with all the api",
+    type: UserTotalRequestDto,
+  })
+  @ApiBadRequestResponse({
+    description: "Invalid username/ no such username",
+    type: UserTotalRequestErrorDto,
+  })
   async userTotalRequest(
     @Req() req: Request,
     @Param("username") username: string,
@@ -73,6 +106,14 @@ export class UserController {
   }
 
   @Get("allusertotalrequest")
+  @ApiCreatedResponse({
+    description: "Successfuly get all user request count information",
+    type: AllUserRequestDto,
+  })
+  @ApiBadRequestResponse({
+    description: "Invalid endpoint",
+    type: AllUserDataError,
+  })
   async allUserTotalRequest(@Req() req: Request): Promise<any> {
     this.endpointService.updateEndpointCounter({
       method: HttpMethod[req.method],
@@ -87,6 +128,12 @@ export class UserController {
   }
 
   @Patch("changerole")
+  @ApiCreatedResponse({
+    description: "Successfully change the role of a user",
+  })
+  @ApiBadRequestResponse({
+    description: "Failed to change role of a user",
+  })
   changeRole(@Req() req: Request, @Body() changeRoleDto: ChangeRoleDto) {
     this.endpointService.updateEndpointCounter({
       method: HttpMethod[req.method],
