@@ -94,21 +94,29 @@ th {
 @media only screen and (max-width: 700px) {
   header {
     padding: 10px;
+    height: 150px;
   }
 
   header img {
     width: 120px;
   }
 
+  #button_info {
+    position: relative;
+    top: 0px; /* Adjust the top position as needed */
+    right: 20px; /* Adjust the right position as needed */
+    z-index: 1; /* Ensure it's above other elements */
+  }
+
   .user-actions {
     position: relative;
     text-align: center;
-    margin-top: 10px;
+    /* margin-top: 10px; */
   }
 
   .user-actions a {
     display: block;
-    margin: 10px 0;
+    margin-top: 10px;
   }
 
   .main-content {
@@ -138,8 +146,10 @@ th {
   td {
     padding: 8px;
   }
-  #usertable th:nth-child(1),
-  #usertable td:nth-child(1),
+  #userTable th:nth-child(1),
+  #userTable td:nth-child(1),
+  #userTable th:nth-child(3),
+  #userTable td:nth-child(3),
   #endpointTable th:nth-child(1),
   #endpointTable td:nth-child(1) {
     display: none; /* Hide the ID column */
