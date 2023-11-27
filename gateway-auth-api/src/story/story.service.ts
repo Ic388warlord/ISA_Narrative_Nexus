@@ -3,6 +3,7 @@ import {
   NotFoundException,
   BadRequestException,
   BadGatewayException,
+  ServiceUnavailableException,
 } from "@nestjs/common";
 import axios from "axios";
 import { StoryDto } from "./dtos/story.dto";
@@ -52,7 +53,9 @@ export class StoryService {
       };
     } catch (error) {
       console.log(error);
-      throw error;
+      throw new ServiceUnavailableException(
+        this.stringService.story.DATABASE_ERROR,
+      );
     }
   }
 
@@ -71,7 +74,9 @@ export class StoryService {
         throw new NotFoundException(this.stringService.story.STORY_NOT_FOUND);
       }
       console.error(error);
-      throw error;
+      throw new ServiceUnavailableException(
+        this.stringService.story.DATABASE_ERROR,
+      );
     }
   }
 
@@ -108,7 +113,9 @@ export class StoryService {
         updatetime: newStory.updatedat,
       };
     } catch (error) {
-      throw error;
+      throw new ServiceUnavailableException(
+        this.stringService.story.DATABASE_ERROR,
+      );
     }
   }
 
@@ -125,7 +132,9 @@ export class StoryService {
 
       return { stories: user.stories };
     } catch (error) {
-      throw error;
+      throw new ServiceUnavailableException(
+        this.stringService.story.DATABASE_ERROR,
+      );
     }
   }
 
@@ -148,7 +157,9 @@ export class StoryService {
         storyinfo: story,
       };
     } catch (error) {
-      throw error;
+      throw new ServiceUnavailableException(
+        this.stringService.story.DATABASE_ERROR,
+      );
     }
   }
 }

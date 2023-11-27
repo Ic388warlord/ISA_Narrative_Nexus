@@ -1,8 +1,17 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty } from "class-validator";
 
-export class SaveStoryDto {
-  @IsNotEmpty()
+export class SaveStoryResponseDto {
+  @ApiProperty({
+    default: 45,
+  })
+  id: number;
+
+  @ApiProperty({ default: `bobby_axelrod` })
+  username: string;
+
+  @ApiProperty({ default: `Bobby's story` })
+  title: string;
+
   @ApiProperty({
     default: `Bobby Axelrod's echoing fist thud heightened the suspense in the dimly lit room.
   Shadows danced ominously, and an unseen presence closed in, sending shivers down his spine.
@@ -13,15 +22,11 @@ export class SaveStoryDto {
   })
   story: string;
 
-  @IsNotEmpty()
   @ApiProperty({ default: `horror` })
   genre: string;
 
-  @IsNotEmpty()
-  @ApiProperty({ default: `bobby_axelrod` })
-  username: string;
-
-  @IsNotEmpty()
-  @ApiProperty({ default: `Bobby's story` })
-  title: string;
+  @ApiProperty({
+    default: "2023-11-27T06:59:49.784Z",
+  })
+  updatetime: string;
 }

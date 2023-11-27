@@ -60,6 +60,7 @@ export class StringService {
     INVALID_STORYID: "Invalid story ID given.",
     STORY_FOUND: "successful retrieval of user's story",
     AXIOS_ERROR: "Received an invalid response from ML server",
+    DATABASE_ERROR: "Unable to connect to the database",
   };
   readonly user = {
     LOG_EMAIL: (email: string) => `Searching for user with email: ${email}`,
