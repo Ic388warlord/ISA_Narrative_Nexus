@@ -224,10 +224,6 @@ function saveStory() {
       if (this.status === 201) {
         const jsonData = JSON.parse(this.response);
         feedback.innerText = `Saved!\n
-      ID: ${jsonData.id}\n
-      Title: ${jsonData.title}\n
-      Genre: ${jsonData.genre}\n
-      Story: ${jsonData.story}\n 
       Saved at: ${jsonData.updatetime}`;
       }
     }
