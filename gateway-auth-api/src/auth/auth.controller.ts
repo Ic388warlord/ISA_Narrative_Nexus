@@ -31,6 +31,8 @@ import { StringService } from "src/util/util.service";
 import { EndpointService } from "src/endpoint/endpoint.service";
 import { HttpMethod } from "@prisma/client";
 import { UserService } from "src/user/user.service";
+import { loginForgotPass } from "./dtos/loginForgotPass.dto";
+import { loginGetSendToResetPage } from "./dtos/loginGetSendToResetPage.dto";
 import { LogoutErrorResponseDto, LogoutOkResponseDto } from "./dtos/logout.dto";
 import { MeErrorResponseDto, MeOkResponseDto } from "./dtos/me.dto";
 
@@ -138,6 +140,18 @@ export class AuthController {
   @ApiBadRequestResponse({ description: "User does not exist" })
   @Public()
   @Get("forgotpassword/:email")
+  @ApiOperation({ 
+    summary: "Sends password reset email if given email is valid" 
+  })
+  @ApiResponse({
+    status: 200,
+    description: "Successful, email has been sent to user's email"
+  })
+  @ApiResponse({
+    status: 404,
+    description: "Unsuccessful, email does not exist",
+    type: loginForgotPass
+  })
   forgotPassword(@Req() req: Request, @Param("email") email: string) {
     this.endpointService.updateEndpointCounter({
       method: HttpMethod[req.method],
@@ -153,6 +167,18 @@ export class AuthController {
   @Public()
   @Get("reset")
   @Render("index")
+  @ApiOperation({
+    summary: "Verifies token from password reset url"
+  })
+  @ApiResponse({
+    status: 200,
+    description: "Successful, token is valid and password can be reset"
+  })
+  @ApiResponse({
+    status: 401,
+    description: "Unsuccessful, token is invalid",
+    type: loginGetSendToResetPage
+  })
   sendToResetPage(@Req() req: Request, @Query("token") token: string) {
     this.endpointService.updateEndpointCounter({
       method: HttpMethod[req.method],
@@ -166,6 +192,16 @@ export class AuthController {
   @Public()
   @Post("reset")
   @Render("index")
+  @ApiOperation({
+    summary: "Updates user password in database"
+  })
+  @ApiResponse({
+    status: 200,
+    description: "Successful, password for user is updated in database"
+  })
+  @ApiResponse({
+    
+  })
   resetPassword(
     @Req() req: Request,
     @Query("token") token: string,
